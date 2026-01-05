@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models\Admin\Gender;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Gender extends Model
+{
+    protected $fillable = [
+        'name',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+}
+

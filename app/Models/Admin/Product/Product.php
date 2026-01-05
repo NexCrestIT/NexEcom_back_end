@@ -8,6 +8,7 @@ use App\Models\Admin\Brand\Brand;
 use App\Models\Admin\Category\Category;
 use App\Models\Admin\Collection\Collection;
 use App\Models\Admin\Discount\Discount;
+use App\Models\Admin\Gender\Gender;
 use App\Models\Admin\Label\Label;
 use App\Models\Admin\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,7 @@ class Product extends Model
         'category_id',
         'brand_id',
         'collection_id',
+        'gender_id',
         'is_active',
         'is_featured',
         'is_new',
@@ -247,6 +249,11 @@ class Product extends Model
     public function collection()
     {
         return $this->belongsTo(Collection::class);
+    }
+
+    public function gender()
+    {
+        return $this->belongsTo(Gender::class);
     }
 
     public function tags()

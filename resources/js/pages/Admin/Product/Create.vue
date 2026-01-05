@@ -26,6 +26,10 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    genders: {
+        type: Array,
+        default: () => []
+    },
     tags: {
         type: Array,
         default: () => []
@@ -63,6 +67,7 @@ const form = useForm({
     category_id: null,
     brand_id: null,
     collection_id: null,
+    gender_id: null,
     tags: [],
     labels: [],
     discounts: [],
@@ -134,6 +139,10 @@ const brandOptions = computed(() => {
 
 const collectionOptions = computed(() => {
     return [{ id: null, name: '— Select Collection —' }, ...props.collections];
+});
+
+const genderOptions = computed(() => {
+    return [{ id: null, name: '— Select Gender —' }, ...props.genders];
 });
 
 const tagOptions = computed(() => {
@@ -545,6 +554,24 @@ const cancel = () => {
                                     :class="{ 'p-invalid': form.errors.collection_id }"
                                 />
                                 <InputError :message="form.errors.collection_id" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <label for="gender_id" class="text-sm font-medium">Gender</label>
+                                <Dropdown 
+                                    id="gender_id" 
+                                    v-model="form.gender_id" 
+                                    :options="genderOptions"
+                                    optionLabel="name" 
+                                    optionValue="id" 
+                                    placeholder="Select gender..." 
+                                    showClear
+                                    class="w-full"
+                                    :class="{ 'p-invalid': form.errors.gender_id }"
+                                />
+                                <InputError :message="form.errors.gender_id" />
                             </div>
                         </div>
 

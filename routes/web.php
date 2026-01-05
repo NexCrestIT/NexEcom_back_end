@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Category\CategoryController;
 use App\Http\Controllers\Admin\Collection\CollectionController;
 use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\FlashSale\FlashSaleController;
+use App\Http\Controllers\Admin\Gender\GenderController;
 use App\Http\Controllers\Admin\Inventory\InventoryController;
 use App\Http\Controllers\Admin\Label\LabelController;
 use App\Http\Controllers\Admin\Price\PriceListController;
@@ -31,6 +32,11 @@ Route::get('dashboard', function () {
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(function () {
+    // Gender routes
+    Route::resource('genders', GenderController::class)->names('genders');
+    Route::post('genders/{gender}/toggle-status', [GenderController::class, 'toggleStatus'])->name('genders.toggle-status');
+    Route::post('genders/bulk-delete', [GenderController::class, 'bulkDelete'])->name('genders.bulk-delete');
+    
     Route::resource('labels', LabelController::class)->names('labels');
     Route::post('labels/bulk-delete', [LabelController::class, 'bulkDelete'])->name('labels.bulk-delete');
     

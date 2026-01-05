@@ -58,6 +58,7 @@ class ProductController extends Controller
         $categoryRepository = app(\App\Repositories\Admin\Category\CategoryRepository::class);
         $brandRepository = app(\App\Repositories\Admin\Brand\BrandRepository::class);
         $collectionRepository = app(\App\Repositories\Admin\Collection\CollectionRepository::class);
+        $genderRepository = app(\App\Repositories\Admin\Gender\GenderRepository::class);
         $tagRepository = app(\App\Repositories\Admin\Tag\TagRepository::class);
         $labelRepository = app(\App\Repositories\Admin\Label\LabelRepository::class);
         $discountRepository = app(\App\Repositories\Admin\Discount\DiscountRepository::class);
@@ -67,6 +68,7 @@ class ProductController extends Controller
             'categories' => $categoryRepository->getCategoriesForDropdown(),
             'brands' => $brandRepository->getBrandsForDropdown(),
             'collections' => $collectionRepository->getCollectionsForDropdown(),
+            'genders' => $genderRepository->getGendersForDropdown(),
             'tags' => $tagRepository->getTagsForDropdown(),
             'labels' => $labelRepository->getAllLabels()->map(fn($label) => ['id' => $label->id, 'name' => $label->name]),
             'discounts' => $discountRepository->getDiscountsForDropdown(),
@@ -130,6 +132,7 @@ class ProductController extends Controller
             'category', 
             'brand', 
             'collection', 
+            'gender',
             'tags', 
             'labels', 
             'attributes.values', 
@@ -139,6 +142,7 @@ class ProductController extends Controller
         $categoryRepository = app(\App\Repositories\Admin\Category\CategoryRepository::class);
         $brandRepository = app(\App\Repositories\Admin\Brand\BrandRepository::class);
         $collectionRepository = app(\App\Repositories\Admin\Collection\CollectionRepository::class);
+        $genderRepository = app(\App\Repositories\Admin\Gender\GenderRepository::class);
         $tagRepository = app(\App\Repositories\Admin\Tag\TagRepository::class);
         $labelRepository = app(\App\Repositories\Admin\Label\LabelRepository::class);
         $discountRepository = app(\App\Repositories\Admin\Discount\DiscountRepository::class);
@@ -149,6 +153,7 @@ class ProductController extends Controller
             'categories' => $categoryRepository->getCategoriesForDropdown(),
             'brands' => $brandRepository->getBrandsForDropdown(),
             'collections' => $collectionRepository->getCollectionsForDropdown(),
+            'genders' => $genderRepository->getGendersForDropdown(),
             'tags' => $tagRepository->getTagsForDropdown(),
             'labels' => $labelRepository->getAllLabels()->map(fn($label) => ['id' => $label->id, 'name' => $label->name]),
             'discounts' => $discountRepository->getDiscountsForDropdown(),

@@ -21,6 +21,7 @@ import CategoryController from '@/actions/App/Http/Controllers/Admin/Category/Ca
 import CollectionController from '@/actions/App/Http/Controllers/Admin/Collection/CollectionController';
 import DiscountController from '@/actions/App/Http/Controllers/Admin/Discount/DiscountController';
 import FlashSaleController from '@/actions/App/Http/Controllers/Admin/FlashSale/FlashSaleController';
+import GenderController from '@/actions/App/Http/Controllers/Admin/Gender/GenderController';
 import InventoryController from '@/actions/App/Http/Controllers/Admin/Inventory/InventoryController';
 import LabelController from '@/actions/App/Http/Controllers/Admin/Label/LabelController';
 import PriceListController from '@/actions/App/Http/Controllers/Admin/Price/PriceListController';
@@ -58,6 +59,11 @@ const mainNavItems = computed(() => [
             {
                 title: 'Tags',
                 href: TagController.index.url(),
+                icon: Tag,
+            },
+            {
+                title: 'Genders',
+                href: GenderController.index.url(),
                 icon: Tag,
             },
             {
