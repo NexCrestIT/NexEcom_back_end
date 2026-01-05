@@ -34,6 +34,10 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    scentFamilies: {
+        type: Array,
+        default: () => []
+    },
     tags: {
         type: Array,
         default: () => []
@@ -73,6 +77,7 @@ const form = useForm({
     brand_id: props.product.brand_id || null,
     collection_id: props.product.collection_id || null,
     gender_id: props.product.gender_id || null,
+    scent_family_id: props.product.scent_family_id || null,
     tags: props.product.tags ? props.product.tags.map(tag => tag.id) : [],
     labels: props.product.labels ? props.product.labels.map(label => label.id) : [],
     discounts: props.product.discounts ? props.product.discounts.map(discount => discount.id) : [],
@@ -151,6 +156,10 @@ const collectionOptions = computed(() => {
 
 const genderOptions = computed(() => {
     return [{ id: null, name: '— Select Gender —' }, ...props.genders];
+});
+
+const scentFamilyOptions = computed(() => {
+    return [{ id: null, name: '— Select Scent Family —' }, ...props.scentFamilies];
 });
 
 const tagOptions = computed(() => {
@@ -609,6 +618,22 @@ const cancel = () => {
                                     :class="{ 'p-invalid': form.errors.gender_id }"
                                 />
                                 <InputError :message="form.errors.gender_id" />
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label for="scent_family_id" class="text-sm font-medium">Scent Family</label>
+                                <Dropdown 
+                                    id="scent_family_id" 
+                                    v-model="form.scent_family_id" 
+                                    :options="scentFamilyOptions"
+                                    optionLabel="name" 
+                                    optionValue="id" 
+                                    placeholder="Select scent family..." 
+                                    showClear
+                                    class="w-full"
+                                    :class="{ 'p-invalid': form.errors.scent_family_id }"
+                                />
+                                <InputError :message="form.errors.scent_family_id" />
                             </div>
                         </div>
 

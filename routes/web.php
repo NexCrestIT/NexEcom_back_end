@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\FlashSale\FlashSaleController;
 use App\Http\Controllers\Admin\Gender\GenderController;
 use App\Http\Controllers\Admin\Inventory\InventoryController;
+use App\Http\Controllers\Admin\ScentFamily\ScentFamilyController;
 use App\Http\Controllers\Admin\Label\LabelController;
 use App\Http\Controllers\Admin\Price\PriceListController;
 use App\Http\Controllers\Admin\Option\OptionController;
@@ -36,6 +37,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::resource('genders', GenderController::class)->names('genders');
     Route::post('genders/{gender}/toggle-status', [GenderController::class, 'toggleStatus'])->name('genders.toggle-status');
     Route::post('genders/bulk-delete', [GenderController::class, 'bulkDelete'])->name('genders.bulk-delete');
+    
+    // Scent Family routes
+    Route::resource('scent-families', ScentFamilyController::class)->names('scent-families');
+    Route::post('scent-families/{scentFamily}/toggle-status', [ScentFamilyController::class, 'toggleStatus'])->name('scent-families.toggle-status');
+    Route::post('scent-families/bulk-delete', [ScentFamilyController::class, 'bulkDelete'])->name('scent-families.bulk-delete');
     
     Route::resource('labels', LabelController::class)->names('labels');
     Route::post('labels/bulk-delete', [LabelController::class, 'bulkDelete'])->name('labels.bulk-delete');

@@ -10,6 +10,7 @@ use App\Models\Admin\Collection\Collection;
 use App\Models\Admin\Discount\Discount;
 use App\Models\Admin\Gender\Gender;
 use App\Models\Admin\Label\Label;
+use App\Models\Admin\ScentFamily\ScentFamily;
 use App\Models\Admin\Tag\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -39,6 +40,7 @@ class Product extends Model
         'brand_id',
         'collection_id',
         'gender_id',
+        'scent_family_id',
         'is_active',
         'is_featured',
         'is_new',
@@ -254,6 +256,11 @@ class Product extends Model
     public function gender()
     {
         return $this->belongsTo(Gender::class);
+    }
+
+    public function scentFamily()
+    {
+        return $this->belongsTo(ScentFamily::class);
     }
 
     public function tags()

@@ -23,6 +23,7 @@ import DiscountController from '@/actions/App/Http/Controllers/Admin/Discount/Di
 import FlashSaleController from '@/actions/App/Http/Controllers/Admin/FlashSale/FlashSaleController';
 import GenderController from '@/actions/App/Http/Controllers/Admin/Gender/GenderController';
 import InventoryController from '@/actions/App/Http/Controllers/Admin/Inventory/InventoryController';
+import ScentFamilyController from '@/actions/App/Http/Controllers/Admin/ScentFamily/ScentFamilyController';
 import LabelController from '@/actions/App/Http/Controllers/Admin/Label/LabelController';
 import PriceListController from '@/actions/App/Http/Controllers/Admin/Price/PriceListController';
 import OptionController from '@/actions/App/Http/Controllers/Admin/Option/OptionController';
@@ -64,6 +65,11 @@ const mainNavItems = computed(() => [
             {
                 title: 'Genders',
                 href: GenderController.index.url(),
+                icon: Tag,
+            },
+            {
+                title: 'Scent Families',
+                href: ScentFamilyController.index.url(),
                 icon: Tag,
             },
             {
