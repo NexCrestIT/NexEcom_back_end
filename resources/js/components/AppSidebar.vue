@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Users, Shield, UserCog, FolderTree, Tag } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, Users, Shield, Tag, UserCog } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 import AttributeController from '@/actions/App/Http/Controllers/Admin/Attribute/AttributeController';
@@ -39,88 +39,6 @@ const mainNavItems = computed(() => [
         icon: LayoutGrid,
     },
     {
-        title: 'Catalog',
-        icon: FolderTree,
-        items: [
-            {
-                title: 'Categories',
-                href: CategoryController.index.url(),
-                icon: Folder,
-            },
-            {
-                title: 'Attributes',
-                href: AttributeController.index.url(),
-                icon: Tag,
-    },
-            {
-                title: 'Labels',
-                href: LabelController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Tags',
-                href: TagController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Genders',
-                href: GenderController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Scent Families',
-                href: ScentFamilyController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Brands',
-                href: BrandController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Collections',
-                href: CollectionController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Options',
-                href: OptionController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Discounts',
-                href: DiscountController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Flash Sales',
-                href: FlashSaleController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Products',
-                href: ProductController.index.url(),
-                icon: Tag,
-            },
-            {
-                title: 'Price Lists',
-                href: PriceListController.index.url(),
-                icon: Tag,
-            },
-        ],
-    },
-    {
-        title: 'Inventory',
-        icon: Folder,
-        items: [
-            {
-                title: 'Inventory',
-                href: InventoryController.index.url(),
-                icon: Folder,
-            },
-        ],
-    },
-    {
         title: 'User Management',
         icon: UserCog,
         items: [
@@ -135,6 +53,76 @@ const mainNavItems = computed(() => [
                 icon: Shield,
             },
         ],
+    },
+    {
+        title: 'Categories',
+        href: CategoryController.index.url(),
+        icon: Folder,
+    },
+    {
+        title: 'Attributes',
+        href: AttributeController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Labels',
+        href: LabelController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Tags',
+        href: TagController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Genders',
+        href: GenderController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Scent Families',
+        href: ScentFamilyController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Brands',
+        href: BrandController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Collections',
+        href: CollectionController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Options',
+        href: OptionController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Discounts',
+        href: DiscountController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Flash Sales',
+        href: FlashSaleController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Products',
+        href: ProductController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Price Lists',
+        href: PriceListController.index.url(),
+        icon: Tag,
+    },
+    {
+        title: 'Inventory',
+        href: InventoryController.index.url(),
+        icon: Folder,
     },
 ]);
 
