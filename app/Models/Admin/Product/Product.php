@@ -350,5 +350,13 @@ class Product extends Model
     {
         return $query->where('collection_id', $collectionId);
     }
+
+    /**
+     * Get the cart items for this product.
+     */
+    public function cartItems()
+    {
+        return $this->hasMany(\App\Models\Cart::class);
+    }
 }
 

@@ -1,0 +1,1160 @@
+{
+	"info": {
+		"_postman_id": "nexcrest-ecommerce-api",
+		"name": "NexCrest E-Commerce API",
+		"description": "API collection for NexCrest E-Commerce application - Brands, Genders, and Scent Families endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customer Authentication",
+			"item": [
+				{
+					"name": "Register Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"+1234567890\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"gender\": \"male\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"register"
+							]
+						},
+						"description": "Register a new customer. Either email or phone (or both) is required."
+					},
+					"response": []
+				},
+				{
+					"name": "Login Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"john@example.com\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"login"
+							]
+						},
+						"description": "Login customer using email or phone number. The 'identifier' field can be either email or phone."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Customer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (if using Sanctum)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"me"
+							]
+						},
+						"description": "Get the currently authenticated customer. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (if using Sanctum)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/customers/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"logout"
+							]
+						},
+						"description": "Logout the currently authenticated customer."
+					},
+					"response": []
+				}
+			],
+			"description": "Customer authentication endpoints for registration and login"
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Get Cart Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Get all items in the customer's cart. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart",
+								"summary"
+							]
+						},
+						"description": "Get cart summary (total items, subtotal, etc.). Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"quantity\": 2,\n    \"attributes\": {\n        \"size\": \"large\",\n        \"color\": \"red\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Add a product to the cart. If the product already exists, the quantity will be increased. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 3,\n    \"attributes\": {\n        \"size\": \"medium\",\n        \"color\": \"blue\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Cart item ID"
+								}
+							]
+						},
+						"description": "Update a cart item (quantity or attributes). Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Item from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Cart item ID"
+								}
+							]
+						},
+						"description": "Remove a specific item from the cart. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cart",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"cart"
+							]
+						},
+						"description": "Clear all items from the cart. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Shopping cart management endpoints. All endpoints require authentication."
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products?per_page=15&page=1&category_id=&brand_id=&collection_id=&gender_id=&scent_family_id=&is_featured=&is_new=&is_bestseller=&min_price=&max_price=&search=&sort_by=sort_order&sort_order=asc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "15",
+									"description": "Number of items per page (1-100)"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number"
+								},
+								{
+									"key": "category_id",
+									"value": "",
+									"description": "Filter by category ID"
+								},
+								{
+									"key": "brand_id",
+									"value": "",
+									"description": "Filter by brand ID"
+								},
+								{
+									"key": "collection_id",
+									"value": "",
+									"description": "Filter by collection ID"
+								},
+								{
+									"key": "gender_id",
+									"value": "",
+									"description": "Filter by gender ID"
+								},
+								{
+									"key": "scent_family_id",
+									"value": "",
+									"description": "Filter by scent family ID"
+								},
+								{
+									"key": "is_featured",
+									"value": "",
+									"description": "Filter featured products (true/false)"
+								},
+								{
+									"key": "is_new",
+									"value": "",
+									"description": "Filter new products (true/false)"
+								},
+								{
+									"key": "is_bestseller",
+									"value": "",
+									"description": "Filter bestseller products (true/false)"
+								},
+								{
+									"key": "min_price",
+									"value": "",
+									"description": "Minimum price filter"
+								},
+								{
+									"key": "max_price",
+									"value": "",
+									"description": "Maximum price filter"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search by name, SKU, or description"
+								},
+								{
+									"key": "sort_by",
+									"value": "sort_order",
+									"description": "Sort field: name, price, created_at, sort_order, rating, sold_count"
+								},
+								{
+									"key": "sort_order",
+									"value": "asc",
+									"description": "Sort order: asc or desc"
+								}
+							]
+						},
+						"description": "Get paginated list of active products with filtering and sorting options."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product by ID or Slug",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Product ID or slug"
+								}
+							]
+						},
+						"description": "Get a single product by ID or slug. View count is automatically incremented."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/featured?limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"featured"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of products to return (1-50)"
+								}
+							]
+						},
+						"description": "Get featured products."
+					},
+					"response": []
+				},
+				{
+					"name": "Get New Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/new?limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"new"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of products to return (1-50)"
+								}
+							]
+						},
+						"description": "Get new products."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bestseller Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/bestsellers?limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"bestsellers"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "Number of products to return (1-50)"
+								}
+							]
+						},
+						"description": "Get bestseller products."
+					},
+					"response": []
+				}
+			],
+			"description": "Product listing endpoints. All endpoints are public (no authentication required)."
+		},
+		{
+			"name": "Brands",
+			"item": [
+				{
+					"name": "Get All Brands",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/brands?is_active=true&is_featured=&search=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"brands"
+							],
+							"query": [
+								{
+									"key": "is_active",
+									"value": "true",
+									"description": "Filter by active status (true/false). Default: true"
+								},
+								{
+									"key": "is_featured",
+									"value": "",
+									"description": "Filter by featured status (true/false). Optional"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Search by name, description, or slug. Optional"
+								}
+							]
+						},
+						"description": "Retrieve all brands. By default, returns only active brands."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/brands",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"brands"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Brand Name\",\n            \"slug\": \"brand-name\",\n            \"description\": \"Brand description\",\n            \"logo\": \"brands/logo.jpg\",\n            \"logo_url\": \"http://localhost/storage/brands/logo.jpg\",\n            \"website\": \"https://example.com\",\n            \"is_active\": true,\n            \"is_featured\": false,\n            \"sort_order\": 0,\n            \"meta_title\": null,\n            \"meta_description\": null,\n            \"meta_keywords\": null,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        }\n    ],\n    \"message\": \"Brands retrieved successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Brand by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/brands/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"brands",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Brand ID"
+								}
+							]
+						},
+						"description": "Retrieve a single brand by its ID."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/brands/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"brands",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Brand Name\",\n        \"slug\": \"brand-name\",\n        \"description\": \"Brand description\",\n        \"logo\": \"brands/logo.jpg\",\n        \"logo_url\": \"http://localhost/storage/brands/logo.jpg\",\n        \"website\": \"https://example.com\",\n        \"is_active\": true,\n        \"is_featured\": false,\n        \"sort_order\": 0,\n        \"meta_title\": null,\n        \"meta_description\": null,\n        \"meta_keywords\": null,\n        \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n        \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n    },\n    \"message\": \"Brand retrieved successfully\"\n}"
+						},
+						{
+							"name": "Not Found Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/brands/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"brands",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": false,\n    \"message\": \"Brand not found\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Brand management endpoints"
+		},
+		{
+			"name": "Genders",
+			"item": [
+				{
+					"name": "Get All Genders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/genders?status=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"genders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "true",
+									"description": "Filter by status (true/false). Default: true (active only)"
+								}
+							]
+						},
+						"description": "Retrieve all genders. By default, returns only active genders."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/genders",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"genders"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Men\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Women\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Unisex\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        }\n    ],\n    \"message\": \"Genders retrieved successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Gender by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/genders/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"genders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Gender ID"
+								}
+							]
+						},
+						"description": "Retrieve a single gender by its ID."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/genders/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"genders",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Men\",\n        \"status\": true,\n        \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n        \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n    },\n    \"message\": \"Gender retrieved successfully\"\n}"
+						},
+						{
+							"name": "Not Found Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/genders/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"genders",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": false,\n    \"message\": \"Gender not found\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Gender management endpoints"
+		},
+		{
+			"name": "Scent Families",
+			"item": [
+				{
+					"name": "Get All Scent Families",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/scent-families?status=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"scent-families"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "true",
+									"description": "Filter by status (true/false). Default: true (active only)"
+								}
+							]
+						},
+						"description": "Retrieve all scent families. By default, returns only active scent families."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/scent-families",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"scent-families"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Floral\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Woody\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Citrus\",\n            \"status\": true,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        }\n    ],\n    \"message\": \"Scent families retrieved successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Scent Family by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/scent-families/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"scent-families",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Scent Family ID"
+								}
+							]
+						},
+						"description": "Retrieve a single scent family by its ID."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/scent-families/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"scent-families",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Floral\",\n        \"status\": true,\n        \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n        \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n    },\n    \"message\": \"Scent family retrieved successfully\"\n}"
+						},
+						{
+							"name": "Not Found Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/scent-families/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"scent-families",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": false,\n    \"message\": \"Scent family not found\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Scent Family management endpoints"
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string",
+			"description": "Base URL for the API. Change this to your actual server URL."
+		},
+		{
+			"key": "customer_token",
+			"value": "",
+			"type": "string",
+			"description": "Customer authentication token (if using Sanctum). Set this after login."
+		}
+	]
+}
+

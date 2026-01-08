@@ -128,6 +128,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     
     // Additional user routes
     Route::post('users/{id}/update-password', [UserController::class, 'updatePassword'])->name('users.update-password');
+    
+    // Customer routes
+    Route::resource('customers', \App\Http\Controllers\Admin\Customer\CustomerController::class)->names('customers');
+    Route::post('customers/{id}/toggle-status', [\App\Http\Controllers\Admin\Customer\CustomerController::class, 'toggleStatus'])->name('customers.toggle-status');
+    Route::post('customers/bulk-delete', [\App\Http\Controllers\Admin\Customer\CustomerController::class, 'bulkDelete'])->name('customers.bulk-delete');
 
     // Category routes
     Route::resource('categories', CategoryController::class)->names('categories');
