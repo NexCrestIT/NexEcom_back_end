@@ -38,6 +38,16 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [\App\Http\Controllers\Api\CartController::class, 'destroy']);
             Route::delete('/', [\App\Http\Controllers\Api\CartController::class, 'clear']);
         });
+
+        //wishlist routes
+        Route::prefix('wishlist')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Api\WishlistController::class, 'index']);
+            Route::get('/summary', [\App\Http\Controllers\Api\WishlistController::class, 'summary']);
+            Route::post('/', [\App\Http\Controllers\Api\WishlistController::class, 'store']);
+            Route::put('/{id}', [\App\Http\Controllers\Api\WishlistController::class, 'update']);
+            Route::delete('/{id}', [\App\Http\Controllers\Api\WishlistController::class, 'destroy']);
+            Route::delete('/', [\App\Http\Controllers\Api\WishlistController::class, 'clear']);
+        });
     });
     
     // Products API (Public)

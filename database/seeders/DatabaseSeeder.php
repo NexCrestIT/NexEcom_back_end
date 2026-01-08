@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
             DiscountSeeder::class,
             FlashSaleSeeder::class,
             InventorySeeder::class,
+            GenderSeeder::class,
+            ScentFamilySeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

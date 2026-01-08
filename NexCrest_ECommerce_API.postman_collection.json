@@ -404,6 +404,163 @@
 			"description": "Shopping cart management endpoints. All endpoints require authentication."
 		},
 		{
+			"name": "Wishlist",
+			"description": "Customer wishlist management endpoints. All endpoints require authentication.",
+			"item": [
+				{
+					"name": "Get Wishlist Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/wishlist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist"
+							]
+						},
+						"description": "Get all wishlist items for the authenticated customer."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wishlist Summary",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/wishlist/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist",
+								"summary"
+							]
+						},
+						"description": "Get wishlist summary (total wishlist items count)."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product to Wishlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/wishlist",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist"
+							]
+						},
+						"description": "Add a product to the customer's wishlist."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Product from Wishlist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/wishlist/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"wishlist",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Wishlist item ID"
+								}
+							]
+						},
+						"description": "Remove a product from the wishlist."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Products",
 			"item": [
 				{
@@ -1157,4 +1314,3 @@
 		}
 	]
 }
-
