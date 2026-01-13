@@ -772,7 +772,7 @@ class ProductSeeder extends Seeder
             ],
         ];
 
-        // Insert products
+        // Insert or update products
         foreach ($products as $productData) {
             $categoryName = $productData['category_name'];
             $brandName = $productData['brand_name'];
@@ -780,33 +780,35 @@ class ProductSeeder extends Seeder
             $genderName = $productData['gender_name'];
             $scentFamilyName = $productData['scent_family_name'];
 
-            $product = Product::create([
-                'name' => $productData['name'],
-                'sku' => $productData['sku'],
-                'short_description' => $productData['short_description'],
-                'description' => $productData['description'],
-                'price' => $productData['price'],
-                'compare_at_price' => $productData['compare_at_price'],
-                'cost_price' => $productData['cost_price'],
-                'stock_quantity' => $productData['stock_quantity'],
-                'track_inventory' => $productData['track_inventory'],
-                'low_stock_threshold' => $productData['low_stock_threshold'],
-                'allow_backorder' => $productData['allow_backorder'],
-                'is_active' => $productData['is_active'],
-                'is_featured' => $productData['is_featured'],
-                'is_new' => $productData['is_new'],
-                'is_bestseller' => $productData['is_bestseller'],
-                'category_id' => $categories->where('name', $categoryName)->first()?->id,
-                'brand_id' => $brands->where('name', $brandName)->first()?->id,
-                'collection_id' => $collectionName ? $collections->where('name', $collectionName)->first()?->id : null,
-                'gender_id' => $genderName ? $genders->where('name', $genderName)->first()?->id : null,
-                'scent_family_id' => $scentFamilyName ? $scentFamilies->where('name', $scentFamilyName)->first()?->id : null,
-                'sort_order' => 0,
-                'view_count' => rand(50, 1500),
-                'sold_count' => rand(10, 500),
-                'rating' => rand(38, 50) / 10,
-                'rating_count' => rand(20, 250),
-            ]);
+            $product = Product::updateOrCreate(
+                ['sku' => $productData['sku']],
+                [
+                    'name' => $productData['name'],
+                    'short_description' => $productData['short_description'],
+                    'description' => $productData['description'],
+                    'price' => $productData['price'],
+                    'compare_at_price' => $productData['compare_at_price'],
+                    'cost_price' => $productData['cost_price'],
+                    'stock_quantity' => $productData['stock_quantity'],
+                    'track_inventory' => $productData['track_inventory'],
+                    'low_stock_threshold' => $productData['low_stock_threshold'],
+                    'allow_backorder' => $productData['allow_backorder'],
+                    'is_active' => $productData['is_active'],
+                    'is_featured' => $productData['is_featured'],
+                    'is_new' => $productData['is_new'],
+                    'is_bestseller' => $productData['is_bestseller'],
+                    'category_id' => $categories->where('name', $categoryName)->first()?->id,
+                    'brand_id' => $brands->where('name', $brandName)->first()?->id,
+                    'collection_id' => $collectionName ? $collections->where('name', $collectionName)->first()?->id : null,
+                    'gender_id' => $genderName ? $genders->where('name', $genderName)->first()?->id : null,
+                    'scent_family_id' => $scentFamilyName ? $scentFamilies->where('name', $scentFamilyName)->first()?->id : null,
+                    'sort_order' => 0,
+                    'view_count' => rand(10, 500),
+                    'sold_count' => rand(0, 100),
+                    'rating' => rand(30, 50) / 10,
+                    'rating_count' => rand(0, 50),
+                ]
+            );
         }
     }
 }
