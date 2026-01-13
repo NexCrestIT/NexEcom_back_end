@@ -32,6 +32,7 @@ class ProductController extends Controller
             'is_bestseller',
             'min_price',
             'max_price',
+            'rating_range',
             'search',
             'sort_by',
             'sort_order',

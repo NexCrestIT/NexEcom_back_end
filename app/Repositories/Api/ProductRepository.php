@@ -72,6 +72,23 @@ class ProductRepository
             $query->where('price', '<=', $filters['max_price']);
         }
 
+        if (! empty($filters['rating_range'])) {
+            $rangeParts = explode('-', str_replace(' ', '', $filters['rating_range']));
+            if (count($rangeParts) === 2) {
+                $upper = (float) $rangeParts[0];
+                $lower = (float) $rangeParts[1];
+
+                if ($lower > $upper) {
+                    [$lower, $upper] = [$upper, $lower];
+                }
+
+                $lower = max(0, min(5, $lower));
+                $upper = max(0, min(5, $upper));
+
+                $query->whereBetween('rating', [$lower, $upper]);
+            }
+        }
+
         // Apply search filter
         if (isset($filters['search']) && ! empty($filters['search'])) {
             $search = $filters['search'];

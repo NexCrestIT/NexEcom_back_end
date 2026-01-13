@@ -575,7 +575,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/products?per_page=15&page=1&category_id=&brand_id=&collection_id=&gender_id=&scent_family_id=&is_featured=&is_new=&is_bestseller=&min_price=&max_price=&search=&sort_by=sort_order&sort_order=asc",
+							"raw": "{{base_url}}/api/v1/products?per_page=15&page=1&category_id=&brand_id=&collection_id=&gender_id=&scent_family_id=&is_featured=&is_new=&is_bestseller=&min_price=&max_price=&rating_range=&search=&sort_by=sort_order&sort_order=asc",
 							"host": [
 								"{{base_url}}"
 							],
@@ -644,6 +644,11 @@
 									"key": "max_price",
 									"value": "",
 									"description": "Maximum price filter"
+								},
+								{
+									"key": "rating_range",
+									"value": "",
+									"description": "Filter by rating range (e.g., 5-4, 4-3, 3-2)"
 								},
 								{
 									"key": "search",
