@@ -50,6 +50,8 @@ Route::prefix('v1')->group(function () {
         });
     });
     
+    Route::get('categories', [\App\Http\Controllers\Api\CategoryController::class, 'index']);
+    
     // Products API (Public)
     Route::get('products', [ProductController::class, 'index']);
     Route::get('products/featured', [ProductController::class, 'featured']);

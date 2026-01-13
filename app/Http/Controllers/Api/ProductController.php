@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $perPage = (int) $request->get('per_page', 15);
+        $perPage = (int) $request->get('per_page', $request->per_page);
         $perPage = min(max($perPage, 1), 100); // Limit between 1 and 100
 
         $filters = $request->only([

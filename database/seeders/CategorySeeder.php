@@ -12,73 +12,73 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // Root categories
-        $electronics = Category::updateOrCreate(
-            ['slug' => 'electronics'],
+        // Root categories - Perfume Types
+        $eauDeParfum = Category::updateOrCreate(
+            ['slug' => 'eau-de-parfum'],
             [
-                'name' => 'Electronics',
-                'description' => 'Electronic devices and gadgets',
+                'name' => 'Eau de Parfum',
+                'description' => 'Long-lasting fragrances with 15-20% concentration',
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 1,
-                'meta_title' => 'Electronics - Shop Latest Gadgets',
-                'meta_description' => 'Browse our wide selection of electronic devices and gadgets.',
+                'meta_title' => 'Eau de Parfum - Luxury Fragrances',
+                'meta_description' => 'Discover our collection of premium Eau de Parfum with long-lasting scents.',
             ]
         );
 
-        $clothing = Category::updateOrCreate(
-            ['slug' => 'clothing'],
+        $eauDeToilette = Category::updateOrCreate(
+            ['slug' => 'eau-de-toilette'],
             [
-                'name' => 'Clothing',
-                'description' => 'Fashion and apparel for all',
+                'name' => 'Eau de Toilette',
+                'description' => 'Light and refreshing fragrances with 5-15% concentration',
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 2,
-                'meta_title' => 'Clothing - Fashion & Apparel',
-                'meta_description' => 'Discover the latest fashion trends and clothing.',
+                'meta_title' => 'Eau de Toilette - Fresh Fragrances',
+                'meta_description' => 'Browse our selection of Eau de Toilette for everyday wear.',
             ]
         );
 
-        $homeGarden = Category::updateOrCreate(
-            ['slug' => 'home-garden'],
+        $eauDeCologne = Category::updateOrCreate(
+            ['slug' => 'eau-de-cologne'],
             [
-                'name' => 'Home & Garden',
-                'description' => 'Everything for your home and garden',
+                'name' => 'Eau de Cologne',
+                'description' => 'Light and citrusy fragrances with 2-5% concentration',
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 3,
             ]
         );
 
-        $sports = Category::updateOrCreate(
-            ['slug' => 'sports-outdoors'],
+        $parfumExtrait = Category::updateOrCreate(
+            ['slug' => 'parfum-extrait'],
             [
-                'name' => 'Sports & Outdoors',
-                'description' => 'Sports equipment and outdoor gear',
+                'name' => 'Parfum Extrait',
+                'description' => 'Highly concentrated luxury fragrances with 20-40% concentration',
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 4,
             ]
         );
 
-        $books = Category::updateOrCreate(
-            ['slug' => 'books-media'],
+        $bodyMist = Category::updateOrCreate(
+            ['slug' => 'body-mist'],
             [
-                'name' => 'Books & Media',
-                'description' => 'Books, music, and movies',
+                'name' => 'Body Mist',
+                'description' => 'Light body sprays and refreshing mists',
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 5,
             ]
         );
 
-        // Electronics subcategories
+        // Eau de Parfum subcategories
         Category::updateOrCreate(
-            ['slug' => 'smartphones'],
+            ['slug' => 'edp-floral'],
             [
-                'name' => 'Smartphones',
-                'description' => 'Latest smartphones and accessories',
-                'parent_id' => $electronics->id,
+                'name' => 'Floral',
+                'description' => 'Floral Eau de Parfum fragrances',
+                'parent_id' => $eauDeParfum->id,
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 1,
@@ -86,23 +86,23 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'laptops'],
+            ['slug' => 'edp-oriental'],
             [
-                'name' => 'Laptops',
-                'description' => 'Laptops and notebooks',
-                'parent_id' => $electronics->id,
+                'name' => 'Oriental',
+                'description' => 'Exotic Oriental Eau de Parfum',
+                'parent_id' => $eauDeParfum->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 2,
             ]
         );
 
-        $tablets = Category::updateOrCreate(
-            ['slug' => 'tablets'],
+        $edpWoody = Category::updateOrCreate(
+            ['slug' => 'edp-woody'],
             [
-                'name' => 'Tablets',
-                'description' => 'Tablets and e-readers',
-                'parent_id' => $electronics->id,
+                'name' => 'Woody',
+                'description' => 'Warm woody Eau de Parfum scents',
+                'parent_id' => $eauDeParfum->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 3,
@@ -110,24 +110,24 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'headphones'],
+            ['slug' => 'edp-fresh'],
             [
-                'name' => 'Headphones',
-                'description' => 'Headphones and earbuds',
-                'parent_id' => $electronics->id,
+                'name' => 'Fresh',
+                'description' => 'Clean and fresh Eau de Parfum',
+                'parent_id' => $eauDeParfum->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 4,
             ]
         );
 
-        // Clothing subcategories
+        // Eau de Toilette subcategories
         Category::updateOrCreate(
-            ['slug' => 'mens-clothing'],
+            ['slug' => 'edt-citrus'],
             [
-                'name' => "Men's Clothing",
-                'description' => "Men's fashion and apparel",
-                'parent_id' => $clothing->id,
+                'name' => 'Citrus',
+                'description' => 'Citrus-based Eau de Toilette',
+                'parent_id' => $eauDeToilette->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 1,
@@ -135,11 +135,11 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'womens-clothing'],
+            ['slug' => 'edt-aquatic'],
             [
-                'name' => "Women's Clothing",
-                'description' => "Women's fashion and apparel",
-                'parent_id' => $clothing->id,
+                'name' => 'Aquatic',
+                'description' => 'Fresh aquatic Eau de Toilette',
+                'parent_id' => $eauDeToilette->id,
                 'is_active' => true,
                 'is_featured' => true,
                 'sort_order' => 2,
@@ -147,24 +147,24 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'kids-clothing'],
+            ['slug' => 'edt-aromatic'],
             [
-                'name' => "Kids' Clothing",
-                'description' => "Children's fashion and apparel",
-                'parent_id' => $clothing->id,
+                'name' => 'Aromatic',
+                'description' => 'Aromatic herbal Eau de Toilette',
+                'parent_id' => $eauDeToilette->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 3,
             ]
         );
 
-        // Home & Garden subcategories
+        // Parfum Extrait subcategories
         Category::updateOrCreate(
-            ['slug' => 'furniture'],
+            ['slug' => 'extrait-luxury'],
             [
-                'name' => 'Furniture',
-                'description' => 'Home furniture',
-                'parent_id' => $homeGarden->id,
+                'name' => 'Luxury Collection',
+                'description' => 'Ultra-premium luxury extraits',
+                'parent_id' => $parfumExtrait->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 1,
@@ -172,11 +172,11 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'kitchen'],
+            ['slug' => 'extrait-niche'],
             [
-                'name' => 'Kitchen',
-                'description' => 'Kitchen appliances and utensils',
-                'parent_id' => $homeGarden->id,
+                'name' => 'Niche Fragrances',
+                'description' => 'Exclusive niche perfume extraits',
+                'parent_id' => $parfumExtrait->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 2,
@@ -184,24 +184,24 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'garden-tools'],
+            ['slug' => 'extrait-vintage'],
             [
-                'name' => 'Garden Tools',
-                'description' => 'Tools for your garden',
-                'parent_id' => $homeGarden->id,
+                'name' => 'Vintage Collection',
+                'description' => 'Classic vintage perfume extraits',
+                'parent_id' => $parfumExtrait->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 3,
             ]
         );
 
-        // Third level - Tablets subcategories
+        // Third level - Woody subcategories
         Category::updateOrCreate(
-            ['slug' => 'ipad'],
+            ['slug' => 'woody-sandalwood'],
             [
-                'name' => 'iPad',
-                'description' => 'Apple iPad tablets',
-                'parent_id' => $tablets->id,
+                'name' => 'Sandalwood',
+                'description' => 'Sandalwood-based fragrances',
+                'parent_id' => $edpWoody->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 1,
@@ -209,11 +209,11 @@ class CategorySeeder extends Seeder
         );
 
         Category::updateOrCreate(
-            ['slug' => 'android-tablets'],
+            ['slug' => 'woody-cedarwood'],
             [
-                'name' => 'Android Tablets',
-                'description' => 'Android-based tablets',
-                'parent_id' => $tablets->id,
+                'name' => 'Cedarwood',
+                'description' => 'Cedarwood-based fragrances',
+                'parent_id' => $edpWoody->id,
                 'is_active' => true,
                 'is_featured' => false,
                 'sort_order' => 2,

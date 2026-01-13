@@ -806,6 +806,67 @@
 			"description": "Product listing endpoints. All endpoints are public (no authentication required)."
 		},
 		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"categories"
+							]
+						},
+						"description": "Retrieve all active categories sorted by sort order."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/categories",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"categories"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Category Name\",\n            \"slug\": \"category-name\",\n            \"description\": \"Category description\",\n            \"image\": \"categories/image.jpg\",\n            \"image_url\": \"http://localhost/storage/categories/image.jpg\",\n            \"is_active\": true,\n            \"sort_order\": 0,\n            \"meta_title\": null,\n            \"meta_description\": null,\n            \"meta_keywords\": null,\n            \"created_at\": \"2025-01-15T10:00:00.000000Z\",\n            \"updated_at\": \"2025-01-15T10:00:00.000000Z\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			],
+			"description": "Category management endpoints"
+		},
+		{
 			"name": "Brands",
 			"item": [
 				{
