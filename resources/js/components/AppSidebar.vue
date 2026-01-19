@@ -17,6 +17,7 @@ import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 import AttributeController from '@/actions/App/Http/Controllers/Admin/Attribute/AttributeController.ts';
 import BrandController from '@/actions/App/Http/Controllers/Admin/Brand/BrandController.ts';
+import CarouselController from '@/actions/App/Http/Controllers/Admin/Carousel/CarouselController.ts';
 import CategoryController from '@/actions/App/Http/Controllers/Admin/Category/CategoryController.ts';
 import CollectionController from '@/actions/App/Http/Controllers/Admin/Collection/CollectionController.ts';
 import DiscountController from '@/actions/App/Http/Controllers/Admin/Discount/DiscountController.ts';
@@ -129,6 +130,11 @@ const mainNavItems = computed(() => [
         title: 'Inventory',
         href: InventoryController.index.url(),
         icon: Folder,
+    },
+    {
+        title: 'Carousels',
+        href: CarouselController.index.url(),
+        icon: Tag,
     },
 ]);
 

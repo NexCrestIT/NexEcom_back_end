@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Attribute\AttributeController;
 use App\Http\Controllers\Admin\Brand\BrandController;
+use App\Http\Controllers\Admin\Carousel\CarouselController;
 use App\Http\Controllers\Admin\Category\CategoryController;
 use App\Http\Controllers\Admin\Collection\CollectionController;
 use App\Http\Controllers\Admin\Discount\DiscountController;
@@ -97,6 +98,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::get('inventory/stock-movements', [InventoryController::class, 'stockMovements'])->name('inventory.stock-movements');
     Route::get('inventory/low-stock', [InventoryController::class, 'lowStock'])->name('inventory.low-stock');
     Route::post('inventory/bulk-delete', [InventoryController::class, 'bulkDelete'])->name('inventory.bulk-delete');
+    
+    // Carousel routes
+    Route::resource('carousels', CarouselController::class)->names('carousels');
+    Route::post('carousels/{carousel}/toggle-status', [CarouselController::class, 'toggleStatus'])->name('carousels.toggle-status');
+    Route::post('carousels/bulk-delete', [CarouselController::class, 'bulkDelete'])->name('carousels.bulk-delete');
     
     // Price List routes
     Route::resource('price-lists', PriceListController::class)->names('price-lists');

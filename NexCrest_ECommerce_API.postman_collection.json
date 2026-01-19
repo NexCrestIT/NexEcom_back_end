@@ -1363,6 +1363,1210 @@
 				}
 			],
 			"description": "Scent Family management endpoints"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						},
+						"description": "Get all orders for the authenticated customer. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notes\": \"Optional order notes\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						},
+						"description": "Create a new order for the authenticated customer. Requires authentication.\n\nNotes:\n- order_number and status are auto-generated (status defaults to pending).\n- total_amount is calculated from the customer's cart items.\n- Provide notes if needed."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"pending"
+							]
+						},
+						"description": "Get all pending orders for the authenticated customer. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Completed Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/orders/completed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"completed"
+							]
+						},
+						"description": "Get all completed orders for the authenticated customer. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Order management endpoints. All endpoints require authentication."
+		},
+		{
+			"name": "Addresses",
+			"item": [
+				{
+					"name": "Get All Addresses",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/addresses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"addresses"
+							]
+						},
+						"description": "Get all addresses for the authenticated customer. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Address",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/addresses/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"addresses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Address ID"
+								}
+							]
+						},
+						"description": "Get a single address by ID. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Address",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": \"123 Main Street, Apartment 4B\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"district\": \"Mumbai Suburban\",\n    \"landmark\": \"Near City Mall\",\n    \"pincode\": \"400001\",\n    \"phone\": \"+919876543210\",\n    \"identification_mark\": \"Red gate at entrance\",\n    \"is_default\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/addresses",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"addresses"
+							]
+						},
+						"description": "Create a new address for the authenticated customer. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": \"456 Park Avenue\",\n    \"city\": \"Delhi\",\n    \"state\": \"Delhi\",\n    \"district\": \"South Delhi\",\n    \"landmark\": \"Opposite Metro Station\",\n    \"pincode\": \"110001\",\n    \"phone\": \"+919876543211\",\n    \"identification_mark\": \"Blue building\",\n    \"is_default\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/addresses/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"addresses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Address ID"
+								}
+							]
+						},
+						"description": "Update an existing address. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/addresses/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"addresses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Address ID"
+								}
+							]
+						},
+						"description": "Delete an address. Requires authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Address management endpoints for customers. All endpoints require authentication."
+		},
+		{
+			"name": "Reviews",
+			"description": "Product review management endpoints",
+			"item": [
+				{
+					"name": "Get Product Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/reviews?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"reviews"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								}
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Get all reviews for a product with pagination. Returns average rating and total review count. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews by Rating",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/reviews/rating/:rating?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"reviews",
+								"rating",
+								":rating"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								}
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								},
+								{
+									"key": "rating",
+									"value": "5",
+									"description": "Rating (1-5)"
+								}
+							]
+						},
+						"description": "Get reviews for a product filtered by specific rating (1-5). Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 5,\n    \"title\": \"Amazing fragrance!\",\n    \"comment\": \"This perfume has an excellent scent that lasts all day. I am very satisfied with the quality and would definitely recommend it to others.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/reviews",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"reviews"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Add a new review for a product. Requires authentication. Rating must be 1-5, comment must be at least 10 characters. Verified purchase status is automatically determined."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"title\": \"Great fragrance\",\n    \"comment\": \"This perfume has a wonderful scent. Very happy with my purchase.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/reviews/:reviewId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								":reviewId"
+							],
+							"variable": [
+								{
+									"key": "reviewId",
+									"value": "1",
+									"description": "Review ID"
+								}
+							]
+						},
+						"description": "Update an existing review. Only the review author can update their review. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/reviews/:reviewId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								":reviewId"
+							],
+							"variable": [
+								{
+									"key": "reviewId",
+									"value": "1",
+									"description": "Review ID"
+								}
+							]
+						},
+						"description": "Delete a review. Only the review author can delete their review. Requires authentication."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product Questions",
+			"description": "Product Q&A management endpoints",
+			"item": [
+				{
+					"name": "Get Product Questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/questions?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								}
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Get all questions for a product with pagination. Returns question statistics. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Answered Questions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/questions/answered?page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"questions",
+								"answered"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number for pagination"
+								}
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Get only answered questions for a product. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/questions/:questionId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								":questionId"
+							],
+							"variable": [
+								{
+									"key": "questionId",
+									"value": "1",
+									"description": "Question ID"
+								}
+							]
+						},
+						"description": "Get details of a specific question. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Ask a Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"How long does the fragrance last after application?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/products/:productId/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":productId",
+								"questions"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "1",
+									"description": "Product ID"
+								}
+							]
+						},
+						"description": "Ask a new question about a product. Requires authentication. Question must be 10-500 characters."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Question",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"What is the longevity of this perfume?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/questions/:questionId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								":questionId"
+							],
+							"variable": [
+								{
+									"key": "questionId",
+									"value": "1",
+									"description": "Question ID"
+								}
+							]
+						},
+						"description": "Update your own question. Only allowed before it's answered. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/questions/:questionId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								":questionId"
+							],
+							"variable": [
+								{
+									"key": "questionId",
+									"value": "1",
+									"description": "Question ID"
+								}
+							]
+						},
+						"description": "Delete your own question. Only the question author can delete. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Question as Helpful",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Bearer token (required)"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/questions/:questionId/helpful",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								":questionId",
+								"helpful"
+							],
+							"variable": [
+								{
+									"key": "questionId",
+									"value": "1",
+									"description": "Question ID"
+								}
+							]
+						},
+						"description": "Mark a question as helpful. Increments the helpful count. Requires authentication."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Carousel Management",
+			"item": [
+				{
+					"name": "Get All Active Carousels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels"
+							]
+						},
+						"description": "Get all active carousel items with pagination and statistics. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Carousel",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Carousel ID"
+								}
+							]
+						},
+						"description": "Get a single carousel item by ID. Public endpoint."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Carousels (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels/admin/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels",
+								"admin",
+								"all"
+							]
+						},
+						"description": "Get all carousels including inactive ones. Admin only. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Carousel",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Summer Collection 2025\",\n    \"subtitle\": \"Discover our new perfume collection\",\n    \"button_name\": \"Shop Now\",\n    \"button_url\": \"/shop/summer-collection\",\n    \"image\": \"/images/carousel/summer-2025.jpg\",\n    \"sort_order\": 1,\n    \"is_active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels"
+							]
+						},
+						"description": "Create a new carousel item. Admin only. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Carousel",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Summer Collection\",\n    \"subtitle\": \"Updated description\",\n    \"button_name\": \"Learn More\",\n    \"button_url\": \"/shop/summer-updated\",\n    \"sort_order\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Carousel ID"
+								}
+							]
+						},
+						"description": "Update carousel item. Admin only. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Carousel",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels",
+								"1"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Carousel ID"
+								}
+							]
+						},
+						"description": "Delete a carousel item. Admin only. Requires authentication."
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Carousel Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/carousels/1/toggle-status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"carousels",
+								"1",
+								"toggle-status"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "Carousel ID"
+								}
+							]
+						},
+						"description": "Toggle carousel active/inactive status. Admin only. Requires authentication."
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
