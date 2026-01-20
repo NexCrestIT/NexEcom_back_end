@@ -129,4 +129,12 @@ class Customer extends Authenticatable
     {
         return $this->hasMany(Cart::class);
     }
+
+    /**
+     * Get the profile for the customer.
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
 }

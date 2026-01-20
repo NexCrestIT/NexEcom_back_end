@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CarouselController;
 use App\Http\Controllers\Api\CustomerAuthController;
 use App\Http\Controllers\Api\GenderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ScentFamilyController;
 use Illuminate\Support\Facades\Route;
 
@@ -65,6 +66,17 @@ Route::prefix('v1')->group(function () {
             Route::put('/{id}', [\App\Http\Controllers\Api\AddressController::class, 'update']);
             Route::delete('/{id}', [\App\Http\Controllers\Api\AddressController::class, 'destroy']);
         });
+
+        // Profile Routes
+        Route::prefix('profiles')->group(function () {
+            Route::get('/', [ProfileController::class, 'index']);
+            Route::post('/', [ProfileController::class, 'store']);
+            Route::get('/my-profile', [ProfileController::class, 'myProfile']);
+            Route::get('/{id}', [ProfileController::class, 'show']);
+            Route::put('/{id}', [ProfileController::class, 'update']);
+            Route::put('/update/me', [ProfileController::class, 'updateMyProfile']);
+            Route::delete('/{id}', [ProfileController::class, 'destroy']);
+        });
     });
 
     Route::get('categories', [\App\Http\Controllers\Api\CategoryController::class, 'index']);
@@ -107,6 +119,7 @@ Route::prefix('v1')->group(function () {
 
     // Brands API
     Route::get('brands', [BrandController::class, 'index']);
+        Route::get('brands/featured', [BrandController::class, 'featured']);
     Route::get('brands/{id}', [BrandController::class, 'show']);
 
     // Genders API

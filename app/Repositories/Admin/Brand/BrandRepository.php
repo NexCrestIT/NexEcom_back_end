@@ -18,7 +18,6 @@ class BrandRepository
     {
         $query = Brand::query();
 
-        // Apply status filter
         if (isset($filters['is_active']) && !empty($filters['is_active'])) {
             $statusValues = is_array($filters['is_active']) ? $filters['is_active'] : [$filters['is_active']];
             $statusBooleans = array_map(function($val) {
@@ -27,7 +26,6 @@ class BrandRepository
             $query->whereIn('is_active', $statusBooleans);
         }
 
-        // Apply featured filter
         if (isset($filters['is_featured']) && !empty($filters['is_featured'])) {
             $featuredValues = is_array($filters['is_featured']) ? $filters['is_featured'] : [$filters['is_featured']];
             $featuredBooleans = array_map(function($val) {
@@ -36,7 +34,6 @@ class BrandRepository
             $query->whereIn('is_featured', $featuredBooleans);
         }
 
-        // Apply search filter
         if (isset($filters['search']) && !empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function($q) use ($search) {
@@ -83,9 +80,16 @@ class BrandRepository
             'meta_keywords' => $data['meta_keywords'] ?? null,
         ];
 
-        // Handle logo upload
-        if (isset($data['logo']) && $data['logo']) {
-            $brandData['logo'] = $this->handleLogoUpload($data['logo']);
+        if (isset($data['main_image']) && $data['main_image']) {
+            $brandData['main_image'] = $this->handleMainImageUpload($data['main_image']);
+        }
+
+        if (isset($data['logo']) && $data['logo'] && !isset($data['main_image'])) {
+            $brandData['main_image'] = $this->handleMainImageUpload($data['logo']);
+        }
+
+        if (isset($data['gallery_images']) && is_array($data['gallery_images']) && !empty($data['gallery_images'])) {
+            $brandData['gallery_images'] = $this->handleGalleryImagesUpload($data['gallery_images']);
         }
 
         return Brand::create($brandData);
@@ -100,8 +104,13 @@ class BrandRepository
      */
     public function update($id, $data)
     {
-        $this->validateData($data, true, $id);
         $brand = Brand::findOrFail($id);
+        
+        if (!isset($data['name']) || empty($data['name'])) {
+            $data['name'] = $brand->name;
+        }
+        
+        $this->validateData($data, true, $id);
         
         $updateData = [
             'name' => $data['name'],
@@ -115,18 +124,41 @@ class BrandRepository
             'meta_keywords' => $data['meta_keywords'] ?? null,
         ];
 
-        // Update slug only if explicitly provided
         if (isset($data['slug']) && $data['slug'] !== $brand->slug) {
             $updateData['slug'] = $data['slug'];
         }
 
-        // Handle logo upload
-        if (isset($data['logo']) && $data['logo']) {
-            // Delete old logo if exists
-            if ($brand->logo) {
-                $this->deleteLogo($brand->logo);
+        if (isset($data['main_image']) && $data['main_image']) {
+            if ($brand->main_image) {
+                $this->deleteMainImage($brand->main_image);
             }
-            $updateData['logo'] = $this->handleLogoUpload($data['logo']);
+            $updateData['main_image'] = $this->handleMainImageUpload($data['main_image']);
+        }
+
+        if (isset($data['logo']) && $data['logo'] && !isset($data['main_image'])) {
+            if ($brand->main_image) {
+                $this->deleteMainImage($brand->main_image);
+            }
+            $updateData['main_image'] = $this->handleMainImageUpload($data['logo']);
+        }
+
+        if (isset($data['remove_main_image']) && $data['remove_main_image']) {
+            if ($brand->main_image) {
+                $this->deleteMainImage($brand->main_image);
+            }
+            $updateData['main_image'] = null;
+        }
+
+        if (isset($data['gallery_images']) && is_array($data['gallery_images']) && !empty($data['gallery_images'])) {
+            $newImages = $this->handleGalleryImagesUpload($data['gallery_images']);
+            $existingImages = $brand->gallery_images ?? [];
+            $updateData['gallery_images'] = array_merge($existingImages, $newImages);
+        }
+
+        if (isset($data['remove_gallery_images']) && is_array($data['remove_gallery_images']) && !empty($data['remove_gallery_images'])) {
+            $this->deleteGalleryImages($data['remove_gallery_images']);
+            $currentGallery = $updateData['gallery_images'] ?? ($brand->gallery_images ?? []);
+            $updateData['gallery_images'] = array_values(array_diff($currentGallery, $data['remove_gallery_images']));
         }
 
         $brand->update($updateData);
@@ -143,9 +175,12 @@ class BrandRepository
     {
         $brand = Brand::findOrFail($id);
         
-        // Delete logo if exists
-        if ($brand->logo) {
-            $this->deleteLogo($brand->logo);
+        if ($brand->main_image) {
+            $this->deleteMainImage($brand->main_image);
+        }
+
+        if ($brand->gallery_images && is_array($brand->gallery_images)) {
+            $this->deleteGalleryImages($brand->gallery_images);
         }
         
         return $brand->delete();
@@ -162,10 +197,14 @@ class BrandRepository
         $brands = Brand::whereIn('id', $ids)->get();
 
         foreach ($brands as $brand) {
-            // Delete logo if exists
-            if ($brand->logo) {
-                $this->deleteLogo($brand->logo);
+            if ($brand->main_image) {
+                $this->deleteMainImage($brand->main_image);
             }
+
+            if ($brand->gallery_images && is_array($brand->gallery_images)) {
+                $this->deleteGalleryImages($brand->gallery_images);
+            }
+
             $brand->delete();
         }
 
@@ -245,40 +284,80 @@ class BrandRepository
     }
 
     /**
-     * Handle logo upload.
+     * Handle main image upload.
      *
-     * @param mixed $logo
+     * @param mixed $mainImage
      * @return string
      */
-    protected function handleLogoUpload($logo)
+    protected function handleMainImageUpload($mainImage)
     {
-        if (is_string($logo) && filter_var($logo, FILTER_VALIDATE_URL)) {
-            // If it's a URL, return as is
-            return $logo;
+        if (is_string($mainImage) && filter_var($mainImage, FILTER_VALIDATE_URL)) {
+            return $mainImage;
         }
 
-        if (is_file($logo)) {
-            $path = $logo->store('brands', 'public');
+        if (is_file($mainImage)) {
+            $path = $mainImage->store('brands', 'public');
             return $path;
         }
 
-        return $logo;
+        return $mainImage;
     }
 
     /**
-     * Delete logo file.
+     * Delete main image file.
      *
-     * @param string $logoPath
+     * @param string $imagePath
      * @return void
      */
-    protected function deleteLogo($logoPath)
+    protected function deleteMainImage($imagePath)
     {
-        if (filter_var($logoPath, FILTER_VALIDATE_URL)) {
-            return; // Don't delete external URLs
+        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+            return; 
         }
 
-        if (Storage::disk('public')->exists($logoPath)) {
-            Storage::disk('public')->delete($logoPath);
+        if (Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+    }
+
+    /**
+     * Handle gallery images upload.
+     *
+     * @param array $images
+     * @return array
+     */
+    protected function handleGalleryImagesUpload($images)
+    {
+        $uploadedImages = [];
+        
+        foreach ($images as $image) {
+            if (is_string($image) && filter_var($image, FILTER_VALIDATE_URL)) {
+                $uploadedImages[] = $image;
+            } elseif (is_file($image)) {
+                $path = $image->store('brands/gallery', 'public');
+                $uploadedImages[] = $path;
+            }
+        }
+        
+        return $uploadedImages;
+    }
+
+    /**
+     * Delete gallery images.
+     *
+     * @param array $imagePaths
+     * @return void
+     */
+    protected function deleteGalleryImages($imagePaths)
+    {
+        foreach ($imagePaths as $imagePath) {
+            if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                continue;
+            }
+
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
         }
     }
 
@@ -297,7 +376,9 @@ class BrandRepository
             'name' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:brands,slug',
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'website' => 'nullable|url|max:255',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',

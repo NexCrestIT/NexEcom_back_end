@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin\Carousel;
 
 use App\Models\Carousel;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class CarouselRepository
@@ -65,9 +66,13 @@ class CarouselRepository
             'subtitle' => $data['subtitle'] ?? null,
             'button_name' => $data['button_name'] ?? null,
             'button_url' => $data['button_url'] ?? null,
-            'image' => $data['image'],
             'is_active' => $data['is_active'] ?? true,
         ];
+
+        // Handle image upload
+        if (isset($data['image']) && $data['image']) {
+            $carouselData['image'] = $this->handleImageUpload($data['image']);
+        }
 
         return Carousel::create($carouselData);
     }
@@ -83,16 +88,29 @@ class CarouselRepository
     {
         $carousel = $this->getCarouselById($id);
         
-        $this->validateData($data);
+        // Set default values before validation
+        if (!isset($data['title']) || empty($data['title'])) {
+            $data['title'] = $carousel->title;
+        }
+        
+        $this->validateData($data, true);
         
         $carouselData = [
-            'title' => $data['title'] ?? $carousel->title,
+            'title' => $data['title'],
             'subtitle' => $data['subtitle'] ?? $carousel->subtitle,
             'button_name' => $data['button_name'] ?? $carousel->button_name,
             'button_url' => $data['button_url'] ?? $carousel->button_url,
-            'image' => $data['image'] ?? $carousel->image,
             'is_active' => isset($data['is_active']) ? $data['is_active'] : $carousel->is_active,
         ];
+
+        // Handle image upload
+        if (isset($data['image']) && $data['image']) {
+            // Delete old image if exists
+            if ($carousel->image) {
+                $this->deleteImage($carousel->image);
+            }
+            $carouselData['image'] = $this->handleImageUpload($data['image']);
+        }
 
         $carousel->update($carouselData);
         return $carousel;
@@ -107,6 +125,12 @@ class CarouselRepository
     public function delete($id)
     {
         $carousel = $this->getCarouselById($id);
+        
+        // Delete image if exists
+        if ($carousel->image) {
+            $this->deleteImage($carousel->image);
+        }
+        
         return $carousel->delete();
     }
 
@@ -131,7 +155,17 @@ class CarouselRepository
      */
     public function bulkDelete($ids)
     {
-        return Carousel::whereIn('id', $ids)->delete();
+        $carousels = Carousel::whereIn('id', $ids)->get();
+        
+        foreach ($carousels as $carousel) {
+            // Delete image if exists
+            if ($carousel->image) {
+                $this->deleteImage($carousel->image);
+            }
+            $carousel->delete();
+        }
+        
+        return true;
     }
 
     /**
@@ -152,16 +186,17 @@ class CarouselRepository
      * Validate carousel data.
      *
      * @param array $data
+     * @param bool $isUpdate
      * @throws ValidationException
      */
-    private function validateData($data)
+    private function validateData($data, $isUpdate = false)
     {
         $rules = [
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'button_name' => 'nullable|string|max:255',
             'button_url' => 'nullable|string|max:255',
-            'image' => 'required|string',
+            'image' => $isUpdate ? 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048' : 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'is_active' => 'nullable|boolean',
         ];
 
@@ -169,6 +204,43 @@ class CarouselRepository
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
+        }
+    }
+
+    /**
+     * Handle image upload.
+     *
+     * @param mixed $image
+     * @return string
+     */
+    protected function handleImageUpload($image)
+    {
+        if (is_string($image) && filter_var($image, FILTER_VALIDATE_URL)) {
+            return $image;
+        }
+
+        if (is_file($image)) {
+            $path = $image->store('carousels', 'public');
+            return $path;
+        }
+
+        return $image;
+    }
+
+    /**
+     * Delete image file.
+     *
+     * @param string $imagePath
+     * @return void
+     */
+    protected function deleteImage($imagePath)
+    {
+        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+            return; // Don't delete external URLs
+        }
+
+        if (Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
         }
     }
 }

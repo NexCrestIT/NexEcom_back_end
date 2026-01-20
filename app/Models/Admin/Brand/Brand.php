@@ -14,7 +14,8 @@ class Brand extends Model
         'name',
         'slug',
         'description',
-        'logo',
+        'main_image',
+        'gallery_images',
         'website',
         'is_active',
         'is_featured',
@@ -28,9 +29,10 @@ class Brand extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'sort_order' => 'integer',
+        'gallery_images' => 'array',
     ];
 
-    protected $appends = ['logo_url'];
+    protected $appends = ['main_image_url', 'gallery_images_urls'];
 
     /**
      * Boot method for the model.
@@ -79,19 +81,36 @@ class Brand extends Model
     }
 
     /**
-     * Get the logo URL.
+     * Get the main image URL.
      */
-    public function getLogoUrlAttribute()
+    public function getMainImageUrlAttribute()
     {
-        if (!$this->logo) {
+        if (!$this->main_image) {
             return null;
         }
 
-        if (filter_var($this->logo, FILTER_VALIDATE_URL)) {
-            return $this->logo;
+        if (filter_var($this->main_image, FILTER_VALIDATE_URL)) {
+            return $this->main_image;
         }
 
-        return asset('storage/' . $this->logo);
+        return asset('storage/' . $this->main_image);
+    }
+
+    /**
+     * Get gallery images URLs.
+     */
+    public function getGalleryImagesUrlsAttribute()
+    {
+        if (!$this->gallery_images || !is_array($this->gallery_images)) {
+            return [];
+        }
+
+        return array_map(function ($image) {
+            if (filter_var($image, FILTER_VALIDATE_URL)) {
+                return $image;
+            }
+            return asset('storage/' . $image);
+        }, $this->gallery_images);
     }
 
     /**

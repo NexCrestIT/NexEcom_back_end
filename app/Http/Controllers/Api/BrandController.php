@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Admin\Brand\BrandRepository;
+use App\Repositories\Api\BrandRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,16 +26,15 @@ class BrandController extends Controller
     {
         try {
             $filters = [
-                'is_active' => $request->get('is_active', true), // Default to active only
                 'is_featured' => $request->get('is_featured'),
                 'search' => $request->get('search'),
             ];
 
-            $brands = $this->brandRepository->getAllBrands($filters);
+            $brands = $this->brandRepository->getBrands($filters);
 
             return response()->json([
                 'success' => true,
-                'data' => $brands,
+                'data' => $brands->values(),
                 'message' => 'Brands retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
@@ -48,21 +47,20 @@ class BrandController extends Controller
     }
 
     /**
-     * Get a single brand by ID.
+     * Get a single brand by ID or slug.
      *
-     * @param int $id
+     * @param string $id
      * @return JsonResponse
      */
-    public function show(int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
         try {
-            $brand = $this->brandRepository->getBrandById($id);
+            $brand = $this->brandRepository->getBrandByIdOrSlug($id);
 
-            // Check if brand is active (optional - remove if you want to show inactive brands)
-            if (!$brand->is_active) {
+            if (!$brand) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Brand not found or inactive',
+                    'message' => 'Brand not found',
                 ], 404);
             }
 
@@ -71,11 +69,6 @@ class BrandController extends Controller
                 'data' => $brand,
                 'message' => 'Brand retrieved successfully',
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Brand not found',
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -84,5 +77,32 @@ class BrandController extends Controller
             ], 500);
         }
     }
-}
 
+    /**
+     * Get featured brands.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function featured(Request $request): JsonResponse
+    {
+        try {
+            $limit = (int) $request->get('limit', 10);
+            $limit = min(max($limit, 1), 50); 
+
+            $brands = $this->brandRepository->getFeaturedBrands($limit);
+
+            return response()->json([
+                'success' => true,
+                'data' => $brands,
+                'message' => 'Featured brands retrieved successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve featured brands',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+}

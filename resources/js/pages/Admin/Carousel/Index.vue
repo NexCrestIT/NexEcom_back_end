@@ -316,8 +316,15 @@ const resetFilters = () => {
 
                         <Column field="image" header="Image" :sortable="true" style="width: 120px">
                             <template #body="slotProps">
-                                <div class="truncate max-w-xs">
-                                    <span class="text-xs text-gray-600">{{ slotProps.data.image }}</span>
+                                <div class="flex items-center h-full">
+                                    <img 
+                                        v-if="slotProps.data.image_url" 
+                                        :src="slotProps.data.image_url" 
+                                        :alt="slotProps.data.title"
+                                        class="w-16 h-10 object-cover rounded"
+                                        @error="$event.target.style.display = 'none'"
+                                    />
+                                    <i v-else class="pi pi-image text-2xl text-gray-400"></i>
                                 </div>
                             </template>
                         </Column>

@@ -5,7 +5,8 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import InputSwitch from 'primevue/inputswitch';
-import { computed } from 'vue';
+import FileUpload from 'primevue/fileupload';
+import { computed, ref } from 'vue';
 import CarouselController from '@/actions/App/Http/Controllers/Admin/Carousel/CarouselController';
 
 const form = useForm({
@@ -13,9 +14,11 @@ const form = useForm({
     subtitle: '',
     button_name: '',
     button_url: '',
-    image: '',
+    image: null,
     is_active: true,
 });
+
+const imagePreview = ref(null);
 
 const breadcrumbItems = computed(() => [
     {
@@ -32,9 +35,27 @@ const breadcrumbItems = computed(() => [
     },
 ]);
 
+const handleImageSelect = (event) => {
+    const file = event.files[0];
+    if (file) {
+        form.image = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const handleImageRemove = () => {
+    form.image = null;
+    imagePreview.value = null;
+};
+
 const submit = () => {
     form.post(CarouselController.store.url(), {
         preserveScroll: true,
+        forceFormData: true,
     });
 };
 </script>
@@ -91,11 +112,33 @@ const submit = () => {
                     <!-- Image -->
                     <div class="flex flex-col gap-2">
                         <label class="font-medium text-gray-700">Image <span class="text-red-500">*</span></label>
-                        <InputText 
-                            v-model="form.image" 
-                            placeholder="e.g., /images/carousel/summer-2025.jpg"
-                            :class="{ 'ng-invalid ng-touched': form.errors.image }"
+                        
+                        <div v-if="imagePreview" class="relative inline-block mb-2">
+                            <img 
+                                :src="imagePreview" 
+                                alt="Preview"
+                                class="w-full h-48 object-cover rounded-lg border"
+                            />
+                            <button
+                                type="button"
+                                @click="handleImageRemove"
+                                class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600"
+                            >
+                                <i class="pi pi-times"></i>
+                            </button>
+                        </div>
+
+                        <FileUpload
+                            mode="basic"
+                            name="image"
+                            accept="image/*"
+                            :maxFileSize="2000000"
+                            chooseLabel="Choose Image"
+                            @select="handleImageSelect"
+                            :auto="true"
+                            customUpload
                         />
+                        <span class="text-gray-500 text-sm">Maximum file size: 2MB</span>
                         <span v-if="form.errors.image" class="text-red-500 text-sm">{{ form.errors.image }}</span>
                     </div>
                 </div>

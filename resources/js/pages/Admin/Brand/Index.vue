@@ -338,8 +338,8 @@ const hasSelectedBrands = computed(() => {
                             <template #body="slotProps">
                                 <div class="flex items-center h-full gap-3">
                                     <img 
-                                        v-if="slotProps.data.logo_url" 
-                                        :src="slotProps.data.logo_url" 
+                                        v-if="slotProps.data.main_image_url" 
+                                        :src="slotProps.data.main_image_url" 
                                         :alt="slotProps.data.name"
                                         class="w-10 h-10 object-contain rounded"
                                         @error="$event.target.style.display = 'none'"

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
-            $table->integer('rating'); // 1-5
-            $table->string('title');
+            $table->integer('rating');
+            $table->string('title')->nullable();
             $table->text('comment');
             $table->boolean('is_verified_purchase')->default(false);
             $table->integer('helpful_count')->default(0);

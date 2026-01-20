@@ -14,7 +14,8 @@ const form = useForm({
     name: '',
     slug: '',
     description: '',
-    logo: null,
+    main_image: null,
+    gallery_images: [],
     website: '',
     is_active: true,
     is_featured: false,
@@ -24,7 +25,8 @@ const form = useForm({
     meta_keywords: '',
 });
 
-const imagePreview = ref(null);
+const mainImagePreview = ref(null);
+const galleryPreviews = ref([]);
 const showSeoFields = ref(false);
 
 const generateSlug = () => {
@@ -39,11 +41,10 @@ const generateSlug = () => {
 const handleImageSelect = (event) => {
     const file = event.files[0];
     if (file) {
-        form.logo = file;
-        // Create preview
+        form.main_image = file;
         const reader = new FileReader();
         reader.onload = (e) => {
-            imagePreview.value = e.target.result;
+            mainImagePreview.value = e.target.result;
         };
         reader.readAsDataURL(file);
     }
@@ -51,7 +52,26 @@ const handleImageSelect = (event) => {
 
 const handleImageRemove = () => {
     form.logo = null;
-    imagePreview.value = null;
+    mainImagePreview.value = null;
+};
+
+const handleGallerySelect = (event) => {
+    const files = Array.from(event.files);
+    files.forEach(file => {
+        if (file) {
+            form.gallery_images.push(file);
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                galleryPreviews.value.push(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+};
+
+const removeGalleryImage = (index) => {
+    form.gallery_images.splice(index, 1);
+    galleryPreviews.value.splice(index, 1);
 };
 
 const breadcrumbItems = computed(() => [
@@ -75,7 +95,7 @@ function save() {
         forceFormData: true,
         onSuccess: () => {
             form.reset();
-            imagePreview.value = null;
+            mainImagePreview.value = null;
         }
     });
 }
@@ -174,42 +194,59 @@ function cancel() {
                         </div>
                     </div>
 
-                    <!-- Logo Upload -->
+                    <!-- Images -->
                     <div class="space-y-4">
-                        <h3 class="text-lg font-semibold border-b pb-2">Brand Logo</h3>
-                        
-                        <div class="flex flex-col gap-2">
-                            <label class="text-sm font-medium">Logo</label>
-                            <FileUpload 
-                                mode="basic"
-                                name="logo"
-                                accept="image/*"
-                                :maxFileSize="2048000"
-                                @select="handleImageSelect"
-                                chooseLabel="Choose Logo"
-                                class="w-full"
-                            />
-                            <InputError :message="form.errors.logo" />
-                            <small class="text-muted-foreground">
-                                Upload brand logo (Max: 2MB, Formats: JPEG, PNG, JPG, GIF, SVG)
-                            </small>
-                            
-                            <!-- Image Preview -->
-                            <div v-if="imagePreview" class="mt-4">
-                                <div class="relative inline-block">
+                        <h3 class="text-lg font-semibold border-b pb-2">Images</h3>
+
+                        <div class="flex flex-col gap-4">
+                            <div>
+                                <label class="text-sm font-medium mb-2 block">Main Image</label>
+                                <div v-if="mainImagePreview" class="relative inline-block mb-2">
                                     <img 
-                                        :src="imagePreview" 
-                                        alt="Logo Preview" 
-                                        class="w-32 h-32 object-contain border rounded-lg"
+                                        :src="mainImagePreview" 
+                                        alt="Main Image Preview" 
+                                        class="h-24 w-24 object-cover rounded-lg border" 
                                     />
-                                    <button 
-                                        type="button"
-                                        @click="handleImageRemove"
-                                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                                    >
-                                        <i class="pi pi-times text-xs"></i>
-                                    </button>
+                                    <Button type="button" icon="pi pi-times" severity="danger" size="small" rounded
+                                        class="absolute -top-2 -right-2" @click="handleImageRemove" />
                                 </div>
+                                <FileUpload 
+                                    mode="basic"
+                                    name="main_image"
+                                    accept="image/*"
+                                    :maxFileSize="5000000"
+                                    chooseLabel="Choose Main Image"
+                                    :auto="false"
+                                    @select="handleImageSelect"
+                                    class="w-50"
+                                />
+                                <small class="text-muted-foreground">Max size: 5MB</small>
+                                <InputError :message="form.errors.main_image" />
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium mb-2 block">Gallery Images</label>
+                                <div v-if="galleryPreviews.length > 0" class="flex flex-wrap gap-2 mb-2">
+                                    <div v-for="(preview, index) in galleryPreviews" :key="index" class="relative">
+                                        <img :src="preview" alt="Gallery preview"
+                                            class="h-24 w-24 object-cover rounded-lg border" />
+                                        <Button type="button" icon="pi pi-times" severity="danger" size="small" rounded
+                                            class="absolute -top-2 -right-2" @click="removeGalleryImage(index)" />
+                                    </div>
+                                </div>
+                                <FileUpload 
+                                    mode="basic"
+                                    name="gallery"
+                                    accept="image/*"
+                                    :maxFileSize="5000000"
+                                    chooseLabel="Add Gallery Image"
+                                    :auto="false"
+                                    @select="handleGallerySelect"
+                                    :multiple="true"
+                                    class="w-50"
+                                />
+                                <small class="text-muted-foreground">Max size: 5MB per image</small>
+                                <InputError :message="form.errors.gallery_images" />
                             </div>
                         </div>
                     </div>

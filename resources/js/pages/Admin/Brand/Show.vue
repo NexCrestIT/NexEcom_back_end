@@ -61,6 +61,10 @@ const handleToggleFeatured = () => {
         preserveScroll: true,
     });
 };
+
+const handleImageError = (event) => {
+    event.target.style.display = 'none';
+};
 </script>
 
 <template>
@@ -70,14 +74,18 @@ const handleToggleFeatured = () => {
         <div class="flex flex-col gap-6 p-6">
             <!-- Header Actions -->
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <img 
-                        v-if="brand.logo_url" 
-                        :src="brand.logo_url" 
-                        :alt="brand.name"
-                        class="w-16 h-16 object-contain border rounded-lg"
-                        @error="$event.target.style.display = 'none'"
-                    />
+                <div class="flex items-center gap-3">
+                    <div v-if="brand.main_image_url" class="h-24 w-24 rounded-lg overflow-hidden bg-gray-100">
+                        <img 
+                            :src="brand.main_image_url" 
+                            :alt="brand.name"
+                            class="h-full w-full object-cover"
+                            @error="handleImageError"
+                        />
+                    </div>
+                    <div v-else class="flex h-24 w-24 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <i class="pi pi-image text-3xl"></i>
+                    </div>
                     <div>
                         <h1 class="text-2xl font-bold">{{ brand.name }}</h1>
                         <code class="text-sm bg-muted px-2 py-1 rounded mt-1">{{ brand.slug }}</code>
@@ -198,23 +206,41 @@ const handleToggleFeatured = () => {
                             </div>
                         </div>
                     </div>
+
+                    <!-- Images -->
+                    <div v-if="brand.main_image_url || (brand.gallery_images_urls && brand.gallery_images_urls.length > 0)" class="rounded-lg border border-border bg-card p-6">
+                        <h2 class="text-lg font-semibold mb-4">Images</h2>
+                        
+                        <div class="space-y-4">
+                            <div v-if="brand.main_image_url">
+                                <label class="text-sm text-muted-foreground mb-2 block">Main Image</label>
+                                <img 
+                                    :src="brand.main_image_url" 
+                                    :alt="brand.name"
+                                    class="h-48 w-48 object-cover rounded-lg border"
+                                    @error="handleImageError"
+                                />
+                            </div>
+
+                            <div v-if="brand.gallery_images_urls && brand.gallery_images_urls.length > 0">
+                                <label class="text-sm text-muted-foreground mb-2 block">Gallery Images</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <img 
+                                        v-for="(image, index) in brand.gallery_images_urls" 
+                                        :key="index"
+                                        :src="image" 
+                                        :alt="`${brand.name} - Image ${index + 1}`"
+                                        class="h-32 w-32 object-cover rounded-lg border"
+                                        @error="handleImageError"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Sidebar -->
                 <div class="space-y-6">
-                    <!-- Logo -->
-                    <div v-if="brand.logo_url" class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="text-lg font-semibold mb-4">Brand Logo</h2>
-                        <div class="flex justify-center">
-                            <img 
-                                :src="brand.logo_url" 
-                                :alt="brand.name"
-                                class="w-full max-w-xs object-contain rounded-lg"
-                                @error="$event.target.style.display = 'none'"
-                            />
-                        </div>
-                    </div>
-
                     <!-- Timestamps -->
                     <div class="rounded-lg border border-border bg-card p-6">
                         <h2 class="text-lg font-semibold mb-4">Timestamps</h2>

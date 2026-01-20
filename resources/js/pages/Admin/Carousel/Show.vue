@@ -34,6 +34,10 @@ const handleEdit = () => {
 const handleBack = () => {
     router.visit(CarouselController.index.url());
 };
+
+const handleImageError = (event) => {
+    event.target.style.display = 'none';
+};
 </script>
 
 <template>
@@ -76,7 +80,15 @@ const handleBack = () => {
                     <!-- Image -->
                     <div class="flex flex-col gap-2">
                         <label class="font-medium text-gray-700">Image</label>
-                        <p class="text-gray-900 break-all">{{ carousel.image }}</p>
+                        <div v-if="carousel.image_url" class="relative">
+                            <img 
+                                :src="carousel.image_url" 
+                                :alt="carousel.title"
+                                class="w-full max-w-sm h-48 object-cover rounded-lg border"
+                                @error="handleImageError"
+                            />
+                        </div>
+                        <p v-else class="text-gray-400">-</p>
                     </div>
                 </div>
 
