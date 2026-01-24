@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('product_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('customer_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id');
+            $table->foreignId('customer_id');
             $table->text('question');
             $table->text('answer')->nullable();
-            $table->foreignId('answered_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('answered_by')->nullable();
             $table->timestamp('answered_at')->nullable();
             $table->boolean('is_public')->default(true);
             $table->integer('helpful_count')->default(0);
