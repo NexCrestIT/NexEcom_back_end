@@ -23,6 +23,8 @@ class CustomerAuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             'email' => [
                 'nullable',
                 'string',
@@ -30,29 +32,33 @@ class CustomerAuthController extends Controller
                 'max:255',
                 Rule::unique('customers', 'email')->whereNull('deleted_at'),
             ],
-            'phone' => [
+            'phone_number' => [
                 'nullable',
                 'string',
                 'max:20',
                 'regex:/^[+]?[0-9]{10,15}$/',
-                Rule::unique('customers', 'phone')->whereNull('deleted_at'),
+                Rule::unique('customers', 'phone_number')->whereNull('deleted_at'),
             ],
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:255',
             'password' => 'required|string|min:8|confirmed',
             'date_of_birth' => 'nullable|date|before:today',
             'gender' => 'nullable|in:male,female,other',
         ], [
             'email.unique' => 'This email is already registered.',
-            'phone.unique' => 'This phone number is already registered.',
-            'phone.regex' => 'Please enter a valid phone number.',
+            'phone_number.unique' => 'This phone number is already registered.',
+            'phone_number.regex' => 'Please enter a valid phone number.',
             'password.min' => 'Password must be at least 8 characters.',
             'password.confirmed' => 'Password confirmation does not match.',
         ]);
 
-        // Ensure at least email or phone is provided
+        // Ensure at least email or phone_number is provided
         $validator->after(function ($validator) use ($request) {
-            if (empty($request->email) && empty($request->phone)) {
+            if (empty($request->email) && empty($request->phone_number)) {
                 $validator->errors()->add('email', 'Either email or phone number is required.');
-                $validator->errors()->add('phone', 'Either email or phone number is required.');
+                $validator->errors()->add('phone_number', 'Either email or phone number is required.');
             }
         });
 
@@ -67,25 +73,29 @@ class CustomerAuthController extends Controller
         try {
             $customer = Customer::create([
                 'name' => $request->name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'email' => $request->email,
-                'phone' => $request->phone,
+                'phone_number' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'postcode' => $request->postcode,
+                'country' => $request->country,
                 'password' => Hash::make($request->password),
                 'date_of_birth' => $request->date_of_birth,
                 'gender' => $request->gender,
                 'is_active' => true,
-                'is_verified' => false, // Email/phone verification can be added later
+                'is_verified' => false,
             ]);
 
-            // Auto-verify if needed (you can add email/phone verification logic here)
             if ($request->email) {
                 $customer->email_verified_at = now();
             }
-            if ($request->phone) {
+            if ($request->phone_number) {
                 $customer->phone_verified_at = now();
             }
             $customer->save();
 
-            // Generate Sanctum token for API authentication
             $token = $customer->createToken('customer-api-token')->plainTextToken;
 
             return response()->json([
@@ -238,5 +248,61 @@ class CustomerAuthController extends Controller
             ], 500);
         }
     }
-}
 
+    /**
+     * Update authenticated customer profile.
+     */
+    public function update(Request $request): JsonResponse
+    {
+        $customer = $request->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('customers', 'email')
+                    ->ignore($customer->id)
+                    ->whereNull('deleted_at'),
+            ],
+            'phone_number' => [
+                'nullable',
+                'regex:/^[+]?[0-9]{10,15}$/',
+                Rule::unique('customers', 'phone_number')
+                    ->ignore($customer->id)
+                    ->whereNull('deleted_at'),
+            ],
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:20',
+            'country' => 'nullable|string|max:255',
+            'date_of_birth' => 'nullable|date|before:today',
+            'gender' => 'nullable|in:male,female,other',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $customer->update($validator->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'data' => $customer->fresh()->makeHidden(['password', 'verification_code']),
+        ], 200);
+    }
+}

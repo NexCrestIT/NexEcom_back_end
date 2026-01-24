@@ -19,8 +19,7 @@ class ProductController extends Controller
     public function index(Request $request): JsonResponse
     {
         $perPage = (int) $request->get('per_page', $request->per_page);
-        $perPage = min(max($perPage, 1), 100); // Limit between 1 and 100
-
+        $perPage = min(max($perPage, 1), 100); 
         $filters = $request->only([
             'category_id',
             'brand_id',
@@ -39,6 +38,20 @@ class ProductController extends Controller
         ]);
 
         $products = $this->productRepository->getProducts($filters, $perPage);
+
+        // Transform attributes for each product to flat associative array: 'size' => ['xs', 'large']
+        foreach ($products as $product) {
+            $attributes = [];
+            foreach ($product->attributes as $attribute) {
+                $slug = $attribute->slug;
+                $valueId = $attribute->pivot->attribute_value_id ?? null;
+                $activeValue = collect($attribute->activeValues ?? [])->firstWhere('id', $valueId);
+                if ($activeValue) {
+                    $attributes[$slug][] = $activeValue->value;
+                }
+            }
+            $product->attributes = $attributes;
+        }
 
         return response()->json([
             'success' => true,
@@ -73,6 +86,18 @@ class ProductController extends Controller
                 'message' => 'Product not found.',
             ], 404);
         }
+
+        // Transform attributes to flat associative array: 'size' => ['xs', 'large']
+        $attributes = [];
+        foreach ($product->attributes as $attribute) {
+            $slug = $attribute->slug;
+            $valueId = $attribute->pivot->attribute_value_id ?? null;
+            $activeValue = collect($attribute->activeValues ?? [])->firstWhere('id', $valueId);
+            if ($activeValue) {
+                $attributes[$slug][] = $activeValue->value;
+            }
+        }
+        $product->attributes = $attributes;
 
         return response()->json([
             'success' => true,
@@ -118,7 +143,7 @@ class ProductController extends Controller
     public function bestsellers(Request $request): JsonResponse
     {
         $limit = (int) $request->get('limit', 10);
-        $limit = min(max($limit, 1), 50); // Limit between 1 and 50
+        $limit = min(max($limit, 1), 50); 
 
         $products = $this->productRepository->getBestsellerProducts($limit);
 

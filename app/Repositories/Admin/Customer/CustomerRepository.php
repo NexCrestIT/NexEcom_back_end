@@ -78,8 +78,10 @@ class CustomerRepository
             $search = $filters['search'];
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                  ->orWhere('phone_number', 'like', "%{$search}%");
             });
         }
 
@@ -110,8 +112,14 @@ class CustomerRepository
         
         $updateData = [
             'name' => $data['name'] ?? $customer->name,
+            'first_name' => $data['first_name'] ?? $customer->first_name,
+            'last_name' => $data['last_name'] ?? $customer->last_name,
             'email' => $data['email'] ?? $customer->email,
-            'phone' => $data['phone'] ?? $customer->phone,
+            'phone_number' => $data['phone_number'] ?? $customer->phone_number,
+            'city' => $data['city'] ?? $customer->city,
+            'state' => $data['state'] ?? $customer->state,
+            'postcode' => $data['postcode'] ?? $customer->postcode,
+            'country' => $data['country'] ?? $customer->country,
             'date_of_birth' => $data['date_of_birth'] ?? $customer->date_of_birth,
             'gender' => $data['gender'] ?? $customer->gender,
             'is_active' => $data['is_active'] ?? $customer->is_active,

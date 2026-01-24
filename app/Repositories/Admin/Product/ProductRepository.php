@@ -285,22 +285,18 @@ class ProductRepository
      */
     protected function syncRelationships(Product $product, array $data)
     {
-        // Sync tags
         if (isset($data['tags']) && is_array($data['tags'])) {
             $product->tags()->sync($data['tags']);
         }
 
-        // Sync labels
         if (isset($data['labels']) && is_array($data['labels'])) {
             $product->labels()->sync($data['labels']);
         }
 
-        // Sync discounts
         if (isset($data['discounts']) && is_array($data['discounts'])) {
             $product->discounts()->sync($data['discounts']);
         }
 
-        // Sync attributes
         if (isset($data['attributes']) && is_array($data['attributes'])) {
             $syncData = [];
             foreach ($data['attributes'] as $attributeData) {
@@ -313,7 +309,7 @@ class ProductRepository
             $product->attributes()->sync($syncData);
         }
     }
-
+    
     /**
      * Delete a product.
      *
@@ -348,7 +344,6 @@ class ProductRepository
         $products = Product::whereIn('id', $ids)->get();
 
         foreach ($products as $product) {
-            // Delete images
             if ($product->main_image) {
                 $this->deleteImage($product->main_image);
             }

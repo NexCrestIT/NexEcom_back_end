@@ -14,8 +14,14 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('email')->nullable()->unique();
-            $table->string('phone')->nullable()->unique();
+            $table->string('phone_number')->nullable()->unique();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('country')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
@@ -34,7 +40,7 @@ return new class extends Migration
 
             // Indexes for performance
             $table->index('email');
-            $table->index('phone');
+            $table->index('phone_number');
             $table->index('is_active');
             $table->index('is_verified');
         });

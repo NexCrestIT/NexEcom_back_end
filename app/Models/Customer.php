@@ -19,8 +19,14 @@ class Customer extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
         'email',
-        'phone',
+        'phone_number',
+        'city',
+        'state',
+        'postcode',
+        'country',
         'password',
         'avatar',
         'date_of_birth',
@@ -92,7 +98,7 @@ class Customer extends Authenticatable
      */
     public function canLoginWithPhone(): bool
     {
-        return ! empty($this->phone) && ! empty($this->phone_verified_at);
+        return ! empty($this->phone_number) && ! empty($this->phone_verified_at);
     }
 
     /**
@@ -102,7 +108,7 @@ class Customer extends Authenticatable
     {
         return static::where(function ($query) use ($identifier) {
             $query->where('email', $identifier)
-                ->orWhere('phone', $identifier);
+                ->orWhere('phone_number', $identifier);
         })->first();
     }
 

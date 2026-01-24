@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\CarouselController;
 use App\Http\Controllers\Api\CustomerAuthController;
 use App\Http\Controllers\Api\GenderController;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ScentFamilyController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +27,9 @@ Route::prefix('v1')->group(function () {
 
     // Customer Protected Routes (Bearer Token Authentication)
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('customers/logout', [CustomerAuthController::class, 'logout']);
         Route::get('customers/me', [CustomerAuthController::class, 'me']);
+        Route::put('customers/me', [CustomerAuthController::class, 'update']);
+        Route::post('customers/logout', [CustomerAuthController::class, 'logout']);
 
         // Cart Routes
         Route::prefix('cart')->group(function () {
@@ -58,6 +58,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/completed', [\App\Http\Controllers\Api\OrderController::class, 'completed']);
         });
 
+        // Razorpay Payment Routes
+        Route::prefix('razorpay')->group(function () {
+            Route::post('/create-order', [\App\Http\Controllers\Api\RazorpayController::class, 'createOrder']);
+            Route::post('/verify-payment', [\App\Http\Controllers\Api\RazorpayController::class, 'verifyPayment']);
+            Route::post('/payment-failed', [\App\Http\Controllers\Api\RazorpayController::class, 'paymentFailed']);
+            Route::get('/payment-status/{orderId}', [\App\Http\Controllers\Api\RazorpayController::class, 'getPaymentStatus']);
+        });
+
         // Address Routes
         Route::prefix('addresses')->group(function () {
             Route::get('/', [\App\Http\Controllers\Api\AddressController::class, 'index']);
@@ -67,16 +75,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [\App\Http\Controllers\Api\AddressController::class, 'destroy']);
         });
 
-        // Profile Routes
-        Route::prefix('profiles')->group(function () {
-            Route::get('/', [ProfileController::class, 'index']);
-            Route::post('/', [ProfileController::class, 'store']);
-            Route::get('/my-profile', [ProfileController::class, 'myProfile']);
-            Route::get('/{id}', [ProfileController::class, 'show']);
-            Route::put('/{id}', [ProfileController::class, 'update']);
-            Route::put('/update/me', [ProfileController::class, 'updateMyProfile']);
-            Route::delete('/{id}', [ProfileController::class, 'destroy']);
-        });
+        
     });
 
     Route::get('categories', [\App\Http\Controllers\Api\CategoryController::class, 'index']);
@@ -87,6 +86,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/new', [ProductController::class, 'newProducts']);
     Route::get('products/bestsellers', [ProductController::class, 'bestsellers']);
     Route::get('products/{id}', [ProductController::class, 'show']);
+    Route::put('products/{id}', [ProductController::class, 'update']);
 
     // Product Reviews API (Public - Get reviews)
     Route::get('products/{productId}/reviews', [\App\Http\Controllers\Api\ReviewController::class, 'index']);

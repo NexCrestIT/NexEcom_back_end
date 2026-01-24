@@ -145,19 +145,33 @@ const handleToggleStatus = (customerId) => {
                     >
                         <Column field="id" header="ID" :sortable="true" style="width: 80px" />
                         
-                        <Column header="Customer" :sortable="true" sortField="name">
+                        <Column header="Customer" :sortable="true" sortField="first_name">
                             <template #body="slotProps">
                                 <div class="flex items-center gap-3">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-                                        {{ slotProps.data.name?.charAt(0)?.toUpperCase() || 'C' }}
+                                        {{ (slotProps.data.first_name || slotProps.data.name || 'C')[0]?.toUpperCase() || 'C' }}
                                     </div>
                                     <div>
-                                        <p class="font-medium">{{ slotProps.data.name }}</p>
+                                        <p class="font-medium">
+                                            {{ slotProps.data.first_name || slotProps.data.last_name ? `${slotProps.data.first_name || ''} ${slotProps.data.last_name || ''}`.trim() : slotProps.data.name }}
+                                        </p>
                                         <p class="text-sm text-muted-foreground">
-                                            {{ slotProps.data.email || slotProps.data.phone || 'N/A' }}
+                                            {{ slotProps.data.email || slotProps.data.phone_number || 'N/A' }}
                                         </p>
                                     </div>
                                 </div>
+                            </template>
+                        </Column>
+
+                        <Column field="first_name" header="First Name" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.first_name || 'N/A' }}
+                            </template>
+                        </Column>
+
+                        <Column field="last_name" header="Last Name" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.last_name || 'N/A' }}
                             </template>
                         </Column>
 
@@ -167,9 +181,33 @@ const handleToggleStatus = (customerId) => {
                             </template>
                         </Column>
 
-                        <Column field="phone" header="Phone" :sortable="true">
+                        <Column field="phone_number" header="Phone" :sortable="true">
                             <template #body="slotProps">
-                                {{ slotProps.data.phone || 'N/A' }}
+                                {{ slotProps.data.phone_number || 'N/A' }}
+                            </template>
+                        </Column>
+
+                        <Column field="city" header="City" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.city || 'N/A' }}
+                            </template>
+                        </Column>
+
+                        <Column field="state" header="State / County" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.state || 'N/A' }}
+                            </template>
+                        </Column>
+
+                        <Column field="postcode" header="Postcode" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.postcode || 'N/A' }}
+                            </template>
+                        </Column>
+
+                        <Column field="country" header="Country" :sortable="true">
+                            <template #body="slotProps">
+                                {{ slotProps.data.country || 'N/A' }}
                             </template>
                         </Column>
 

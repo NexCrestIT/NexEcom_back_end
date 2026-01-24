@@ -13,10 +13,21 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'address_id',
         'order_number',
         'total_amount',
         'status',
+        'payment_status',
+        'payment_method',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'payment_error',
+        'paid_at',
         'notes',
+    ];
+
+    protected $casts = [
+        'paid_at' => 'datetime',
     ];
 
     /**
@@ -33,6 +44,22 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(\App\Models\OrderItem::class);
+    }
+
+    /**
+     * Order has many order items (alias)
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(\App\Models\OrderItem::class);
+    }
+
+    /**
+     * Order belongs to an address
+     */
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Address::class);
     }
 
     /**

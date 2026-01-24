@@ -119,10 +119,10 @@ const handleEdit = () => {
                             <p class="text-muted-foreground" v-if="customer.email">
                                 <i class="pi pi-envelope mr-1"></i>{{ customer.email }}
                             </p>
-                            <p class="text-muted-foreground" v-if="customer.phone">
-                                <i class="pi pi-phone mr-1"></i>{{ customer.phone }}
+                            <p class="text-muted-foreground" v-if="customer.phone_number">
+                                <i class="pi pi-phone mr-1"></i>{{ customer.phone_number }}
                             </p>
-                            <p v-if="!customer.email && !customer.phone" class="text-muted-foreground">
+                            <p v-if="!customer.email && !customer.phone_number" class="text-muted-foreground">
                                 No contact information
                             </p>
                         </div>
@@ -165,8 +165,12 @@ const handleEdit = () => {
                     <h2 class="text-lg font-semibold mb-4">Customer Information</h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="text-sm font-medium text-muted-foreground">Full Name</label>
-                            <p class="text-base">{{ customer.name }}</p>
+                            <label class="text-sm font-medium text-muted-foreground">First Name</label>
+                            <p class="text-base">{{ customer.first_name || 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-muted-foreground">Last Name</label>
+                            <p class="text-base">{{ customer.last_name || 'N/A' }}</p>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-muted-foreground">Email</label>
@@ -174,7 +178,25 @@ const handleEdit = () => {
                         </div>
                         <div>
                             <label class="text-sm font-medium text-muted-foreground">Phone</label>
-                            <p class="text-base">{{ customer.phone || 'N/A' }}</p>
+                            <p class="text-base">{{ customer.phone_number || 'N/A' }}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground">City</label>
+                                <p class="text-base">{{ customer.city || 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground">State / County</label>
+                                <p class="text-base">{{ customer.state || 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground">Postcode</label>
+                                <p class="text-base">{{ customer.postcode || 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-muted-foreground">Country</label>
+                                <p class="text-base">{{ customer.country || 'N/A' }}</p>
+                            </div>
                         </div>
                         <div>
                             <label class="text-sm font-medium text-muted-foreground">Date of Birth</label>

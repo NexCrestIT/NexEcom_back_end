@@ -6,7 +6,7 @@
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
+			   {
 			"name": "Customer Authentication",
 			"item": [
 				{
@@ -27,7 +27,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"+1234567890\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"gender\": \"male\"\n}",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postcode\": \"10001\",\n    \"country\": \"United States\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"gender\": \"male\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -46,7 +46,7 @@
 								"register"
 							]
 						},
-						"description": "Register a new customer. Either email or phone (or both) is required."
+						"description": "Register a new customer. Either email or phone_number (or both) is required. Optionally include first_name, last_name, city, state, postcode, and country."
 					},
 					"response": []
 				},
@@ -125,38 +125,85 @@
 					"response": []
 				},
 				{
-					"name": "Logout Customer",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text",
-								"description": "Bearer token (if using Sanctum)"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/customers/logout",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"customers",
-								"logout"
-							]
-						},
-						"description": "Logout the currently authenticated customer."
-					},
-					"response": []
-				}
+					   "name": "Logout Customer",
+					   "request": {
+						   "method": "POST",
+						   "header": [
+							   {
+								   "key": "Accept",
+								   "value": "application/json",
+								   "type": "text"
+							   },
+							   {
+								   "key": "Authorization",
+								   "value": "Bearer {{customer_token}}",
+								   "type": "text",
+								   "description": "Bearer token (if using Sanctum)"
+							   }
+						   ],
+						   "url": {
+							   "raw": "{{base_url}}/api/v1/customers/logout",
+							   "host": [
+								   "{{base_url}}"
+							   ],
+							   "path": [
+								   "api",
+								   "v1",
+								   "customers",
+								   "logout"
+							   ]
+						   },
+						   "description": "Logout the currently authenticated customer."
+					   },
+					   "response": []
+				   },
+				   {
+					   "name": "Update Customer",
+					   "request": {
+						   "method": "PUT",
+						   "header": [
+							   {
+								   "key": "Accept",
+								   "value": "application/json",
+								   "type": "text"
+							   },
+							   {
+								   "key": "Content-Type",
+								   "value": "application/json",
+								   "type": "text"
+							   },
+							   {
+								   "key": "Authorization",
+								   "value": "Bearer {{customer_token}}",
+								   "type": "text",
+								   "description": "Bearer token (required)"
+							   }
+						   ],
+						   "body": {
+							   "mode": "raw",
+							   "raw": "{\n    \"name\": \"John Doe\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postcode\": \"10001\",\n    \"country\": \"United States\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"gender\": \"male\"\n}",
+							   "options": {
+								   "raw": {
+									   "language": "json"
+								   }
+							   }
+						   },
+						   "url": {
+							   "raw": "{{base_url}}/api/v1/customers/me",
+							   "host": [
+								   "{{base_url}}"
+							   ],
+							   "path": [
+								   "api",
+								   "v1",
+								   "customers",
+								   "me"
+							   ]
+						   },
+						   "description": "Update the currently authenticated customer's profile. Requires authentication. Only include fields you wish to update."
+					   },
+					   "response": []
+				   }
 			],
 			"description": "Customer authentication endpoints for registration and login"
 		},
@@ -1515,6 +1562,187 @@
 			"description": "Order management endpoints. All endpoints require authentication."
 		},
 		{
+			"name": "Razorpay Payment",
+			"item": [
+				{
+					"name": "Create Razorpay Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Customer authentication token"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address_id\": 1,\n    \"notes\": \"Order for premium headphones\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/razorpay/create-order",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"razorpay",
+								"create-order"
+							]
+						},
+						"description": "Create a new order and Razorpay order for payment. Returns Razorpay order details needed for frontend checkout."
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Customer authentication token"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razorpay_order_id\": \"order_xxxxxxxxxxxxx\",\n    \"razorpay_payment_id\": \"pay_xxxxxxxxxxxxx\",\n    \"razorpay_signature\": \"signature_xxxxxxxxxxxxx\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/razorpay/verify-payment",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"razorpay",
+								"verify-payment"
+							]
+						},
+						"description": "Verify Razorpay payment signature after successful payment. This endpoint confirms the payment and updates order status."
+					},
+					"response": []
+				},
+				{
+					"name": "Payment Failed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Customer authentication token"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"razorpay_order_id\": \"order_xxxxxxxxxxxxx\",\n    \"error_code\": \"BAD_REQUEST_ERROR\",\n    \"error_description\": \"Payment failed due to insufficient funds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/razorpay/payment-failed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"razorpay",
+								"payment-failed"
+							]
+						},
+						"description": "Handle payment failure callback. Updates order status to cancelled and payment status to failed."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{customer_token}}",
+								"type": "text",
+								"description": "Customer authentication token"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/razorpay/payment-status/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"razorpay",
+								"payment-status",
+								"1"
+							]
+						},
+						"description": "Get payment status for a specific order by order ID."
+					},
+					"response": []
+				}
+			],
+			"description": "Razorpay payment integration endpoints. All endpoints require customer authentication."
+		},
+		{
 			"name": "Addresses",
 			"item": [
 				{
@@ -2563,297 +2791,6 @@
 							]
 						},
 						"description": "Toggle carousel active/inactive status. Admin only. Requires authentication."
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Profile",
-			"item": [
-				{
-					"name": "Get All Profiles",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles"
-							]
-						},
-						"description": "Get all profiles (paginated). Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Get My Profile",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles/my-profile",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles",
-								"my-profile"
-							]
-						},
-						"description": "Get current customer's profile. Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Profile by ID",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles",
-								"1"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1",
-									"description": "Profile ID"
-								}
-							]
-						},
-						"description": "Get a profile by ID. Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Create Profile",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"customer_id\": 1,\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"phone_number\": \"+1-555-123-4567\",\n    \"email_address\": \"john@example.com\",\n    \"city\": \"New York\",\n    \"state_county\": \"NY\",\n    \"postcode\": \"10001\",\n    \"country\": \"United States\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles"
-							]
-						},
-						"description": "Create a new profile. Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Profile by ID",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\",\n    \"phone_number\": \"+1-555-987-6543\",\n    \"email_address\": \"jane@example.com\",\n    \"city\": \"Los Angeles\",\n    \"state_county\": \"CA\",\n    \"postcode\": \"90001\",\n    \"country\": \"United States\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles",
-								"1"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1",
-									"description": "Profile ID"
-								}
-							]
-						},
-						"description": "Update a profile by ID. Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Update My Profile",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"Jane\",\n    \"last_name\": \"Smith\",\n    \"phone_number\": \"+1-555-987-6543\",\n    \"email_address\": \"jane@example.com\",\n    \"city\": \"Los Angeles\",\n    \"state_county\": \"CA\",\n    \"postcode\": \"90001\",\n    \"country\": \"United States\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles/update/me",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles",
-								"update",
-								"me"
-							]
-						},
-						"description": "Update current customer's profile. Requires authentication."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Profile by ID",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer {{customer_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/profiles/1",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"profiles",
-								"1"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1",
-									"description": "Profile ID"
-								}
-							]
-						},
-						"description": "Delete a profile by ID. Requires authentication."
 					},
 					"response": []
 				}

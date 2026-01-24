@@ -13,34 +13,29 @@ class ProductRepository
      */
     public function getProducts(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Product::with(['category', 'brand', 'collection'])
-            ->where('is_active', true); // Only show active products
+        $query = Product::with(['category', 'brand', 'collection', 'attributes.activeValues'])
+            ->where('is_active', true); 
 
-        // Apply category filter
         if (isset($filters['category_id']) && ! empty($filters['category_id'])) {
             $categoryIds = is_array($filters['category_id']) ? $filters['category_id'] : [$filters['category_id']];
             $query->whereIn('category_id', $categoryIds);
         }
 
-        // Apply brand filter
         if (isset($filters['brand_id']) && ! empty($filters['brand_id'])) {
             $brandIds = is_array($filters['brand_id']) ? $filters['brand_id'] : [$filters['brand_id']];
             $query->whereIn('brand_id', $brandIds);
         }
 
-        // Apply collection filter
         if (isset($filters['collection_id']) && ! empty($filters['collection_id'])) {
             $collectionIds = is_array($filters['collection_id']) ? $filters['collection_id'] : [$filters['collection_id']];
             $query->whereIn('collection_id', $collectionIds);
         }
 
-        // Apply gender filter
         if (isset($filters['gender_id']) && ! empty($filters['gender_id'])) {
             $genderIds = is_array($filters['gender_id']) ? $filters['gender_id'] : [$filters['gender_id']];
             $query->whereIn('gender_id', $genderIds);
         }
 
-        // Apply scent family filter
         if (isset($filters['scent_family_id']) && ! empty($filters['scent_family_id'])) {
             $scentFamilyIds = is_array($filters['scent_family_id']) ? $filters['scent_family_id'] : [$filters['scent_family_id']];
             $query->whereIn('scent_family_id', $scentFamilyIds);
@@ -131,7 +126,6 @@ class ProductRepository
             ->first();
 
         if ($product) {
-            // Increment view count
             $product->increment('view_count');
         }
 
