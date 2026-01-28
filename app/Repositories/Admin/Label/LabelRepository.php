@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Admin\Label;
 
-use App\Models\Admin\label\Label;
+use App\Models\Admin\Label\Label;
 use Illuminate\Validation\ValidationException;
 
 class LabelRepository

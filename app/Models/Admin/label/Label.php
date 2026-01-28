@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Admin\label;
+namespace App\Models\Admin\Label;
 
 use Illuminate\Database\Eloquent\Model;
 
