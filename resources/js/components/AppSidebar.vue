@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Users, Shield, Tag, UserCog, UserCircle } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, Users, Shield, Tag, UserCog, UserCircle, ShoppingCart } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from './AppLogo.vue';
 import AttributeController from '@/actions/App/Http/Controllers/Admin/Attribute/AttributeController.ts';
@@ -33,6 +33,7 @@ import TagController from '@/actions/App/Http/Controllers/Admin/Tag/TagControlle
 import UserController from '@/actions/App/Http/Controllers/Admin/User/UserController.ts';
 import RoleController from '@/actions/App/Http/Controllers/Admin/Role/RoleController.ts';
 import CustomerController from '@/actions/App/Http/Controllers/Admin/Customer/CustomerController.ts';
+import OrderController from '@/actions/App/Http/Controllers/Admin/Order/OrderController.ts';
 
 const mainNavItems = computed(() => [
     {
@@ -60,6 +61,11 @@ const mainNavItems = computed(() => [
         title: 'Customers',
         href: CustomerController.index.url(),
         icon: UserCircle,
+    },
+    {
+        title: 'Orders',
+        href: OrderController.index.url(),
+        icon: ShoppingCart,
     },
     {
         title: 'Categories',

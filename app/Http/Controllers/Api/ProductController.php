@@ -127,7 +127,7 @@ class ProductController extends Controller
     public function newProducts(Request $request): JsonResponse
     {
         $limit = (int) $request->get('limit', 10);
-        $limit = min(max($limit, 1), 50); // Limit between 1 and 50
+        $limit = min(max($limit, 1), 50);
 
         $products = $this->productRepository->getNewProducts($limit);
 

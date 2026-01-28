@@ -1,0 +1,365 @@
+{
+	"info": {
+		"_postman_id": "customer-auth-avatar-api",
+		"name": "Customer Authentication with Avatar",
+		"description": "Updated Customer Authentication API with Avatar Upload Support",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"email\": \"john@example.com\",\n    \"phone_number\": \"+1234567890\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"postcode\": \"10001\",\n    \"country\": \"United States\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"date_of_birth\": \"1990-01-01\",\n    \"gender\": \"male\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"register"
+					]
+				},
+				"description": "Register a new customer. Either email or phone_number (or both) is required."
+			},
+			"response": []
+		},
+		{
+			"name": "Login Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identifier\": \"john@example.com\",\n    \"password\": \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"login"
+					]
+				},
+				"description": "Login customer using email or phone number. The 'identifier' field can be either email or phone."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current Customer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customer_token}}",
+						"type": "text",
+						"description": "Bearer token (required)"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/me",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"me"
+					]
+				},
+				"description": "Get the currently authenticated customer details."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer Profile (with Avatar)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customer_token}}",
+						"type": "text",
+						"description": "Bearer token (required)"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text",
+							"description": "Laravel method spoofing for multipart form data"
+						},
+						{
+							"key": "name",
+							"value": "John Doe Updated",
+							"type": "text",
+							"description": "Full name"
+						},
+						{
+							"key": "first_name",
+							"value": "John",
+							"type": "text",
+							"description": "First name (optional)"
+						},
+						{
+							"key": "last_name",
+							"value": "Doe",
+							"type": "text",
+							"description": "Last name (optional)"
+						},
+						{
+							"key": "email",
+							"value": "john.updated@example.com",
+							"type": "text",
+							"description": "Email address (optional)"
+						},
+						{
+							"key": "phone_number",
+							"value": "+1234567890",
+							"type": "text",
+							"description": "Phone number (optional)"
+						},
+						{
+							"key": "city",
+							"value": "New York",
+							"type": "text",
+							"description": "City (optional)"
+						},
+						{
+							"key": "state",
+							"value": "NY",
+							"type": "text",
+							"description": "State (optional)"
+						},
+						{
+							"key": "postcode",
+							"value": "10001",
+							"type": "text",
+							"description": "Postal code (optional)"
+						},
+						{
+							"key": "country",
+							"value": "United States",
+							"type": "text",
+							"description": "Country (optional)"
+						},
+						{
+							"key": "date_of_birth",
+							"value": "1990-01-01",
+							"type": "text",
+							"description": "Date of birth (optional)"
+						},
+						{
+							"key": "gender",
+							"value": "male",
+							"type": "text",
+							"description": "Gender: male, female, other (optional)"
+						},
+						{
+							"key": "avatar",
+							"type": "file",
+							"description": "Profile picture - jpeg, jpg, png, gif, webp (max 2MB)",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/me",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"me"
+					]
+				},
+				"description": "Update customer profile including avatar upload. Use form-data to include file. All fields are optional - only include fields you wish to update."
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Avatar Only",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customer_token}}",
+						"type": "text",
+						"description": "Bearer token (required)"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "avatar",
+							"type": "file",
+							"description": "Profile picture - jpeg, jpg, png, gif, webp (max 2MB)",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/avatar",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"avatar"
+					]
+				},
+				"description": "Upload or update customer avatar/profile picture. Returns avatar path and full URL."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Avatar",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customer_token}}",
+						"type": "text",
+						"description": "Bearer token (required)"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/avatar",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"avatar"
+					]
+				},
+				"description": "Delete customer avatar/profile picture. Sets avatar field to null."
+			},
+			"response": []
+		},
+		{
+			"name": "Logout Customer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{customer_token}}",
+						"type": "text",
+						"description": "Bearer token (required)"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/v1/customers/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"logout"
+					]
+				},
+				"description": "Logout the currently authenticated customer. Revokes the current access token."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string",
+			"description": "Base URL for the API"
+		},
+		{
+			"key": "customer_token",
+			"value": "",
+			"type": "string",
+			"description": "Set this after login - copy the token from login response"
+		}
+	]
+}

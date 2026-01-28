@@ -24,7 +24,10 @@ class OrderRepository
 
     public function getAllOrders($customerId)
     {
-        return Order::where('customer_id', $customerId)->get();
+        return Order::with(['orderItems.product', 'address'])
+            ->where('customer_id', $customerId)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
 
@@ -33,15 +36,27 @@ class OrderRepository
      */
     public function getCompletedOrders($customerId)
     {
-        return Order::where('customer_id', $customerId)
+        return Order::with(['orderItems.product', 'address'])
+            ->where('customer_id', $customerId)
             ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
     public function getPendingOrders($customerId)
     {
-        return Order::where('customer_id', $customerId)
+        return Order::with(['orderItems.product', 'address'])
+            ->where('customer_id', $customerId)
             ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
             ->get();
+    }
+    
+    public function getOrderById($orderId, $customerId)
+    {
+        return Order::with(['orderItems.product', 'address'])
+            ->where('id', $orderId)
+            ->where('customer_id', $customerId)
+            ->first();
     }
 }

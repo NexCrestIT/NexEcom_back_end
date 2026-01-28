@@ -30,6 +30,8 @@ Route::prefix('v1')->group(function () {
         Route::get('customers/me', [CustomerAuthController::class, 'me']);
         Route::put('customers/me', [CustomerAuthController::class, 'update']);
         Route::post('customers/logout', [CustomerAuthController::class, 'logout']);
+        Route::post('customers/avatar', [CustomerAuthController::class, 'uploadAvatar']);
+        Route::delete('customers/avatar', [CustomerAuthController::class, 'deleteAvatar']);
 
         // Cart Routes
         Route::prefix('cart')->group(function () {
@@ -56,6 +58,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [\App\Http\Controllers\Api\OrderController::class, 'store']);
             Route::get('/pending', [\App\Http\Controllers\Api\OrderController::class, 'pending']);
             Route::get('/completed', [\App\Http\Controllers\Api\OrderController::class, 'completed']);
+            Route::get('/{id}', [\App\Http\Controllers\Api\OrderController::class, 'show']);
         });
 
         // Razorpay Payment Routes
@@ -144,4 +147,7 @@ Route::prefix('v1')->group(function () {
 
     // Carousel API (Public - Get single carousel) - Must be after admin routes
     Route::get('carousels/{id}', [CarouselController::class, 'show']);
-});
+
+    // Razorpay Payment Callback & Webhook (outside auth middleware)
+    Route::get('razorpay/payment-callback', [\App\Http\Controllers\Api\RazorpayController::class, 'paymentCallback'])->name('razorpay.callback');
+    Route::post('razorpay/webhook', [\App\Http\Controllers\Api\RazorpayController::class, 'webhook'])->name('razorpay.webhook');});

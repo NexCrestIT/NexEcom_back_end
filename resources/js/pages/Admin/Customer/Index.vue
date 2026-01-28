@@ -148,7 +148,15 @@ const handleToggleStatus = (customerId) => {
                         <Column header="Customer" :sortable="true" sortField="first_name">
                             <template #body="slotProps">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                                    <div v-if="slotProps.data.avatar_url" class="h-10 w-10 rounded-full overflow-hidden border-2 border-border">
+                                        <img 
+                                            :src="slotProps.data.avatar_url" 
+                                            :alt="slotProps.data.name"
+                                            class="h-full w-full object-cover"
+                                            @error="$event.target.parentElement.innerHTML = `<div class='flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-semibold'>${(slotProps.data.first_name || slotProps.data.name || 'C')[0]?.toUpperCase() || 'C'}</div>`"
+                                        />
+                                    </div>
+                                    <div v-else class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
                                         {{ (slotProps.data.first_name || slotProps.data.name || 'C')[0]?.toUpperCase() || 'C' }}
                                     </div>
                                     <div>

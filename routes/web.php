@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Discount\DiscountController;
 use App\Http\Controllers\Admin\FlashSale\FlashSaleController;
 use App\Http\Controllers\Admin\Gender\GenderController;
 use App\Http\Controllers\Admin\Inventory\InventoryController;
+use App\Http\Controllers\Admin\Order\OrderController;
 use App\Http\Controllers\Admin\ScentFamily\ScentFamilyController;
 use App\Http\Controllers\Admin\Label\LabelController;
 use App\Http\Controllers\Admin\Price\PriceListController;
@@ -150,6 +151,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified'])->group(
     Route::post('categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulk-delete');
     Route::get('categories-search', [CategoryController::class, 'search'])->name('categories.search');
     Route::get('categories-dropdown', [CategoryController::class, 'dropdown'])->name('categories.dropdown');
+
+    // Order routes
+    Route::resource('orders', OrderController::class)->names('orders');
+    Route::post('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::post('orders/{order}/update-payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
+    Route::post('orders/{order}/update-notes', [OrderController::class, 'updateNotes'])->name('orders.update-notes');
+    Route::post('orders/{order}/process-refund', [OrderController::class, 'processRefund'])->name('orders.process-refund');
+    Route::post('orders/bulk-update-status', [OrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update-status');
+    Route::get('orders/export/csv', [OrderController::class, 'export'])->name('orders.export');
+    Route::get('orders/dashboard/stats', [OrderController::class, 'dashboardStats'])->name('orders.dashboard-stats');
 });
 
 

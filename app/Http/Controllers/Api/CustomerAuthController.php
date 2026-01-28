@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -287,6 +288,7 @@ class CustomerAuthController extends Controller
             'country' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date|before:today',
             'gender' => 'nullable|in:male,female,other',
+            'avatar' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // Avatar upload
         ]);
 
         if ($validator->fails()) {
@@ -297,12 +299,125 @@ class CustomerAuthController extends Controller
             ], 422);
         }
 
-        $customer->update($validator->validated());
+        try {
+            $updateData = $validator->validated();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Profile updated successfully',
-            'data' => $customer->fresh()->makeHidden(['password', 'verification_code']),
-        ], 200);
+            // Handle avatar upload if present
+            if ($request->hasFile('avatar')) {
+                // Delete old avatar if exists
+                if ($customer->avatar && !filter_var($customer->avatar, FILTER_VALIDATE_URL)) {
+                    Storage::disk('public')->delete($customer->avatar);
+                }
+
+                // Store new avatar
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                $updateData['avatar'] = $avatarPath;
+            }
+
+            $customer->update($updateData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile updated successfully',
+                'data' => $customer->fresh()->makeHidden(['password', 'verification_code']),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update profile',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Upload customer avatar.
+     */
+    public function uploadAvatar(Request $request): JsonResponse
+    {
+        $customer = $request->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'avatar' => 'required|image|mimes:jpeg,jpg,png,gif,webp|max:2048', // 2MB max
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            // Delete old avatar if exists
+            if ($customer->avatar && !filter_var($customer->avatar, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($customer->avatar);
+            }
+
+            // Store new avatar
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+            // Update customer
+            $customer->update(['avatar' => $avatarPath]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Avatar uploaded successfully',
+                'data' => [
+                    'avatar' => $avatarPath,
+                    'avatar_url' => asset('storage/' . $avatarPath),
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload avatar',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete customer avatar.
+     */
+    public function deleteAvatar(Request $request): JsonResponse
+    {
+        $customer = $request->user();
+
+        if (!$customer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+            ], 401);
+        }
+
+        try {
+            // Delete avatar file if exists
+            if ($customer->avatar && !filter_var($customer->avatar, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($customer->avatar);
+            }
+
+            // Update customer
+            $customer->update(['avatar' => null]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Avatar deleted successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete avatar',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -69,4 +69,20 @@ public function completed()
     );
 }
 
+/**
+ * Get a specific order details
+ */
+public function show($id)
+{
+    $order = $this->orderRepository->getOrderById($id, Auth::id());
+    
+    if (!$order) {
+        return response()->json([
+            'message' => 'Order not found'
+        ], 404);
+    }
+    
+    return response()->json($order);
+}
+
 }
